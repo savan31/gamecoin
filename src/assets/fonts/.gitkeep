@@ -1,0 +1,24 @@
+// src/assets/fonts/.gitkeep
+
+# This file keeps the fonts directory in git
+# Add custom fonts here if needed:
+#
+# Recommended fonts (download from Google Fonts):
+# - Inter-Regular.ttf
+# - Inter-Medium.ttf
+# - Inter-SemiBold.ttf
+# - Inter-Bold.ttf
+#
+# To use custom fonts, add them here and configure in app.json:
+# {
+#   "expo": {
+#     "plugins": [
+#       [
+#         "expo-font",
+#         {
+#           "fonts": ["./src/assets/fonts/Inter-Regular.ttf"]
+#         }
+#       ]
+#     ]
+#   }
+# }

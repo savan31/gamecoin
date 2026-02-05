@@ -1,0 +1,14 @@
+// src/assets/images/.gitkeep
+
+# This file keeps the images directory in git
+# Add app images here:
+#
+# Recommended images:
+# - logo.png (app logo)
+# - empty-state.png (for empty lists)
+# - onboarding/ (onboarding screens)
+#
+# Image guidelines:
+# - Use PNG for transparency
+# - Provide @2x and @3x versions for React Native
+# - Keep file sizes optimized

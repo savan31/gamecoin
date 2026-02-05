@@ -1,0 +1,18 @@
+// src/assets/sounds/.gitkeep
+
+# This file keeps the sounds directory in git
+# Add sound effects here if implementing audio:
+#
+# Recommended sounds:
+# - tap.mp3 (button tap)
+# - success.mp3 (success feedback)
+# - error.mp3 (error feedback)
+# - spin.mp3 (wheel spinning)
+# - coin.mp3 (coin added/removed)
+# - scratch.mp3 (scratch card)
+# - reveal.mp3 (prize reveal)
+#
+# Sound guidelines:
+# - Use MP3 format for compatibility
+# - Keep files under 100KB each
+# - Ensure sounds are royalty-free
