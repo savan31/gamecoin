@@ -25,7 +25,7 @@ const initialState: SettingsState = {
     hapticsEnabled: true,
     hasAcceptedDisclaimer: false,
     conversionRates: {
-        usdRate: 80, // Default: 80 coins = 1 USD (simulated)
+        usdRate: 1000, // Fixed: 1000 coins = 1 USD (1 coin = 0.001 USD)
         inGameRate: 100, // Default: 100 coins = 1 in-game item (simulated)
     },
     isLoading: false,
@@ -72,15 +72,6 @@ const settingsSlice = createSlice({
         acceptDisclaimer: (state) => {
             state.hasAcceptedDisclaimer = true;
         },
-        setConversionRates: (state, action: PayloadAction<ConversionRates>) => {
-            state.conversionRates = action.payload;
-        },
-        updateUsdRate: (state, action: PayloadAction<number>) => {
-            state.conversionRates.usdRate = Math.max(1, action.payload);
-        },
-        updateInGameRate: (state, action: PayloadAction<number>) => {
-            state.conversionRates.inGameRate = Math.max(1, action.payload);
-        },
         resetSettings: () => initialState,
     },
     extraReducers: (builder) => {
@@ -91,7 +82,11 @@ const settingsSlice = createSlice({
             .addCase(loadSettings.fulfilled, (state, action) => {
                 state.isLoading = false;
                 if (action.payload) {
-                    return { ...state, ...action.payload, isLoading: false };
+                    // Start with stored settings
+                    const storedSettings = action.payload;
+                    // Enforce fixed rates regardless of what was stored
+                    storedSettings.conversionRates = initialState.conversionRates;
+                    return { ...state, ...storedSettings, isLoading: false };
                 }
             })
             .addCase(loadSettings.rejected, (state) => {
@@ -105,9 +100,6 @@ export const {
     toggleSound,
     toggleHaptics,
     acceptDisclaimer,
-    setConversionRates,
-    updateUsdRate,
-    updateInGameRate,
     resetSettings,
 } = settingsSlice.actions;
 

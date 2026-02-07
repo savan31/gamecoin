@@ -17,13 +17,10 @@ import { useAppSelector, useAppDispatch } from '../../store/hooks';
 import {
     selectBalance,
     selectDailyChange,
-    addCoins,
-    subtractCoins,
     saveCoinData,
 } from '../../store/slices/coinSlice';
 import {
     selectRecentTransactions,
-    addTransaction,
     saveTransactions,
 } from '../../store/slices/transactionSlice';
 import { useTheme } from '../../hooks/useTheme';
@@ -48,16 +45,9 @@ export const TrackerScreen: React.FC = () => {
 
     const [refreshing, setRefreshing] = React.useState(false);
 
-    const handleAddTransaction = useCallback(
-        (type: 'add' | 'subtract') => {
-            navigation.navigate('TransactionModal', { type });
-        },
-        [navigation]
-    );
-
     const handleRefresh = useCallback(async () => {
         setRefreshing(true);
-        // Simulate refresh - in production, this would reload from storage
+         // Simulate refresh - in production, this would reload from storage
         await new Promise((resolve) => setTimeout(resolve, 500));
         setRefreshing(false);
     }, []);
@@ -98,25 +88,7 @@ export const TrackerScreen: React.FC = () => {
                     />
                 </Animated.View>
 
-                <Animated.View
-                    entering={FadeInDown.duration(400).delay(300)}
-                    style={styles.actionsContainer}
-                >
-                    <Button
-                        title="Add Coins"
-                        onPress={() => handleAddTransaction('add')}
-                        variant="primary"
-                        icon="plus"
-                        style={styles.actionButton}
-                    />
-                    <Button
-                        title="Subtract"
-                        onPress={() => handleAddTransaction('subtract')}
-                        variant="secondary"
-                        icon="minus"
-                        style={styles.actionButton}
-                    />
-                </Animated.View>
+
 
                 <Animated.View
                     entering={FadeInDown.duration(400).delay(400)}

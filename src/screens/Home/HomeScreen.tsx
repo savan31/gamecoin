@@ -155,12 +155,7 @@ export const HomeScreen: React.FC = () => {
                         Quick Actions
                     </Text>
                     <View style={styles.quickActionsGrid}>
-                        <QuickActionCard
-                            title="Add Coins"
-                            icon="plus-circle"
-                            color={theme.colors.success}
-                            onPress={() => navigation.navigate('TransactionModal', { type: 'add' })}
-                        />
+
                         <QuickActionCard
                             title="Calculator"
                             icon="calculator"
@@ -177,6 +172,12 @@ export const HomeScreen: React.FC = () => {
                                 screen: 'ProfileTab',
                                 params: { screen: 'Statistics' },
                             })}
+                        />
+                        <QuickActionCard
+                            title="Earn Coins"
+                            icon="gift"
+                            color={theme.colors.warning}
+                            onPress={() => navigation.navigate('EarnScreen')}
                         />
                     </View>
                 </Animated.View>

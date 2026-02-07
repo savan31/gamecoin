@@ -7,8 +7,14 @@ import type { CompositeScreenProps, NavigatorScreenParams } from '@react-navigat
 // Root Stack
 export type RootStackParamList = {
     MainTabs: NavigatorScreenParams<MainTabParamList>;
-    TransactionModal: { type: 'add' | 'subtract' };
+
     DisclaimerModal: undefined;
+    EarnScreen: undefined;
+    SpinScreen: undefined;
+    TaskDetailScreen: { task: any };
+    WatchVideoScreen: undefined;
+    DailyLoginScreen: undefined;
+    ShareScreen: undefined;
 };
 
 // Bottom Tabs

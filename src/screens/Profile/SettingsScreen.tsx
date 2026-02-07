@@ -15,8 +15,7 @@ import {
     resetSettings,
     ThemeMode,
 } from '../../store/slices/settingsSlice';
-import { resetCoins, saveCoinData } from '../../store/slices/coinSlice';
-import { clearAllTransactions, saveTransactions } from '../../store/slices/transactionSlice';
+
 import { resetUser, saveUserData } from '../../store/slices/userSlice';
 import { useTheme } from '../../hooks/useTheme';
 import { Card } from '../../components/common/Card';
@@ -134,8 +133,6 @@ export const SettingsScreen: React.FC = () => {
                         setIsResetting(true);
                         try {
                             // Reset all slices
-                            dispatch(resetCoins());
-                            dispatch(clearAllTransactions());
                             dispatch(resetSettings());
                             dispatch(resetUser());
 
@@ -144,8 +141,6 @@ export const SettingsScreen: React.FC = () => {
 
                             // Save fresh state
                             await Promise.all([
-                                dispatch(saveCoinData()),
-                                dispatch(saveTransactions()),
                                 dispatch(saveSettings()),
                                 dispatch(saveUserData()),
                             ]);

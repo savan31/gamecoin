@@ -13,8 +13,6 @@ import Animated, { FadeInDown } from 'react-native-reanimated';
 import { useAppSelector, useAppDispatch } from '../../store/hooks';
 import {
     selectConversionRates,
-    updateUsdRate,
-    updateInGameRate,
     saveSettings,
 } from '../../store/slices/settingsSlice';
 import { selectBalance } from '../../store/slices/coinSlice';
@@ -34,13 +32,7 @@ export const CalculatorScreen: React.FC = () => {
     const conversionRates = useAppSelector(selectConversionRates);
 
     const [coinInput, setCoinInput] = useState(currentBalance.toString());
-    const [showRateEditor, setShowRateEditor] = useState(false);
-    const [tempUsdRate, setTempUsdRate] = useState(
-        conversionRates.usdRate.toString()
-    );
-    const [tempInGameRate, setTempInGameRate] = useState(
-        conversionRates.inGameRate.toString()
-    );
+
 
     const coinValue = useMemo(() => {
         const parsed = parseFloat(coinInput) || 0;
@@ -61,21 +53,7 @@ export const CalculatorScreen: React.FC = () => {
         setCoinInput(currentBalance.toString());
     }, [currentBalance]);
 
-    const handleSaveRates = useCallback(() => {
-        const newUsdRate = parseFloat(tempUsdRate) || 80;
-        const newInGameRate = parseFloat(tempInGameRate) || 100;
 
-        dispatch(updateUsdRate(newUsdRate));
-        dispatch(updateInGameRate(newInGameRate));
-        dispatch(saveSettings());
-        setShowRateEditor(false);
-    }, [dispatch, tempUsdRate, tempInGameRate]);
-
-    const handleCancelRateEdit = useCallback(() => {
-        setTempUsdRate(conversionRates.usdRate.toString());
-        setTempInGameRate(conversionRates.inGameRate.toString());
-        setShowRateEditor(false);
-    }, [conversionRates]);
 
     return (
         <KeyboardAvoidingView
@@ -165,56 +143,7 @@ export const CalculatorScreen: React.FC = () => {
                     </Card>
                 </Animated.View>
 
-                <Animated.View entering={FadeInDown.duration(400).delay(400)}>
-                    <Button
-                        title={showRateEditor ? 'Cancel' : 'Edit Conversion Rates'}
-                        onPress={() => showRateEditor ? handleCancelRateEdit() : setShowRateEditor(true)}
-                        variant="outline"
-                        icon="settings"
-                        style={styles.editButton}
-                    />
-                </Animated.View>
 
-                {showRateEditor && (
-                    <Animated.View entering={FadeInDown.duration(300)}>
-                        <Card style={styles.editorCard}>
-                            <Text style={[styles.cardTitle, { color: theme.colors.text }]}>
-                                Edit Conversion Rates
-                            </Text>
-
-                            <View style={styles.rateInputContainer}>
-                                <Text style={[styles.rateInputLabel, { color: theme.colors.textSecondary }]}>
-                                    Coins per $1 USD:
-                                </Text>
-                                <Input
-                                    value={tempUsdRate}
-                                    onChangeText={setTempUsdRate}
-                                    keyboardType="numeric"
-                                    style={styles.rateInput}
-                                />
-                            </View>
-
-                            <View style={styles.rateInputContainer}>
-                                <Text style={[styles.rateInputLabel, { color: theme.colors.textSecondary }]}>
-                                    Coins per In-Game Item:
-                                </Text>
-                                <Input
-                                    value={tempInGameRate}
-                                    onChangeText={setTempInGameRate}
-                                    keyboardType="numeric"
-                                    style={styles.rateInput}
-                                />
-                            </View>
-
-                            <Button
-                                title="Save Rates"
-                                onPress={handleSaveRates}
-                                variant="primary"
-                                style={styles.saveButton}
-                            />
-                        </Card>
-                    </Animated.View>
-                )}
 
                 <Animated.View entering={FadeInDown.duration(400).delay(500)}>
                     <Card style={styles.disclaimerCard}>
