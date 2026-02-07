@@ -8,6 +8,7 @@ import { SettingsScreen } from '../screens/Profile/SettingsScreen';
 import { StatisticsScreen } from '../screens/Statistics/StatisticsScreen';
 import { DisclaimerScreen } from '../screens/Profile/DisclaimerScreen';
 import { AboutScreen } from '../screens/Profile/AboutScreen';
+import { PrivacyPolicyScreen } from '../screens/Profile/PrivacyPolicyScreen';
 import type { ProfileStackParamList } from './navigationTypes';
 
 const Stack = createNativeStackNavigator<ProfileStackParamList>();
@@ -56,6 +57,11 @@ export const ProfileStackNavigator: React.FC = () => {
                 name="About"
                 component={AboutScreen}
                 options={{ headerTitle: 'About' }}
+            />
+            <Stack.Screen
+                name="PrivacyPolicy"
+                component={PrivacyPolicyScreen}
+                options={{ headerTitle: 'Privacy Policy' }}
             />
         </Stack.Navigator>
     );

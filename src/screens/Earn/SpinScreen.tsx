@@ -167,7 +167,7 @@ export const SpinScreen: React.FC = () => {
                      <View style={styles.wheelContainer}>
                         {/* Pointer */}
                         <View style={styles.pointerContainer}>
-                            <View style={[styles.pointer, { borderTopColor: theme.colors.error }]} />
+                            <View style={styles.pointer} />
                         </View>
                         
                         {/* Wheel */}
@@ -234,22 +234,24 @@ const styles = StyleSheet.create({
     },
     pointerContainer: {
         position: 'absolute',
-        top: -20,
+        top: -15,
         zIndex: 10,
         alignItems: 'center',
         justifyContent: 'center',
     },
     pointer: {
-        width: 0,
-        height: 0,
-        backgroundColor: 'transparent',
-        borderStyle: 'solid',
-        borderLeftWidth: 15,
-        borderRightWidth: 15,
-        borderTopWidth: 30,
-        borderLeftColor: 'transparent',
-        borderRightColor: 'transparent',
-        // borderTopColor set in inline styles
+        width: 30,
+        height: 30,
+        backgroundColor: '#FFFFFF',
+        borderRadius: 4,
+        transform: [{ rotate: '45deg' }],
+        borderWidth: 3,
+        borderColor: '#F43F5E',
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.3,
+        shadowRadius: 3,
+        elevation: 5,
     },
     controls: {
         width: '100%',

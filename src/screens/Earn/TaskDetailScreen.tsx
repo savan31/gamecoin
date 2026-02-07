@@ -1,7 +1,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, ScrollView, ActivityIndicator, Linking, Dimensions } from 'react-native';
-import Animated, { FadeInDown, Layout } from 'react-native-reanimated';
+import Animated, { FadeInDown, Layout, ZoomIn } from 'react-native-reanimated';
 import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
 import { useAppDispatch } from '../../store/hooks';
 import { addTaskReward } from '../../store/thunks/taskRewardsThunk';
@@ -107,7 +107,7 @@ export const TaskDetailScreen: React.FC = () => {
     };
 
     const handleScratch = () => {
-        const next = Math.min(1, scratchProgress + 0.1);
+        const next = Math.min(1, scratchProgress + 0.15);
         setScratchProgress(next);
         setProgress(next);
         if (next >= 1) {
@@ -259,8 +259,13 @@ export const TaskDetailScreen: React.FC = () => {
                     {status === 'processing' && renderGameUI()}
 
                     {status === 'ready_to_claim' && (
-                        <Animated.View entering={FadeInDown} style={styles.successContainer}>
-                             <Icon name="check-circle" size={48} color={theme.colors.success} />
+                        <Animated.View 
+                            entering={FadeInDown.springify()} 
+                            style={styles.successContainer}
+                        >
+                             <Animated.View entering={ZoomIn.delay(200)}>
+                                <Icon name="check-circle" size={64} color={theme.colors.success} />
+                             </Animated.View>
                              <Text style={[styles.successTitle, { color: theme.colors.text }]}>Level Complete!</Text>
                              <Text style={[styles.successSub, { color: theme.colors.textSecondary }]}>
                                  You earned {task.reward} RBX

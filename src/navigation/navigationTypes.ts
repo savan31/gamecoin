@@ -35,6 +35,7 @@ export type ProfileStackParamList = {
     Statistics: undefined;
     Disclaimer: undefined;
     About: undefined;
+    PrivacyPolicy: undefined;
 };
 
 // Screen Props Types

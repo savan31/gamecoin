@@ -2,6 +2,7 @@
 
 import React from 'react';
 import { View, Text, StyleSheet, ScrollView, Linking, Pressable } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 import Animated, { FadeInDown } from 'react-native-reanimated';
 import { useTheme } from '../../hooks/useTheme';
 import { Card } from '../../components/common/Card';
@@ -12,6 +13,7 @@ const APP_VERSION = '1.0.0';
 const BUILD_NUMBER = '1';
 
 export const AboutScreen: React.FC = () => {
+    const navigation = useNavigation<any>();
     const { theme } = useTheme();
 
     const handleOpenLink = async (url: string) => {
@@ -168,24 +170,11 @@ export const AboutScreen: React.FC = () => {
                 <Card style={styles.legalCard}>
                     <Pressable
                         style={styles.legalItem}
-                        onPress={() => handleOpenLink('https://example.com/privacy')}
+                        onPress={() => navigation.navigate('PrivacyPolicy')}
                     >
-                        <Icon name="user" size={18} color={theme.colors.textSecondary} />
+                        <Icon name="shield" size={18} color={theme.colors.textSecondary} />
                         <Text style={[styles.legalText, { color: theme.colors.text }]}>
                             Privacy Policy
-                        </Text>
-                        <Icon name="chevron-right" size={18} color={theme.colors.textTertiary} />
-                    </Pressable>
-
-                    <View style={[styles.legalDivider, { backgroundColor: theme.colors.border }]} />
-
-                    <Pressable
-                        style={styles.legalItem}
-                        onPress={() => handleOpenLink('https://example.com/terms')}
-                    >
-                        <Icon name="info" size={18} color={theme.colors.textSecondary} />
-                        <Text style={[styles.legalText, { color: theme.colors.text }]}>
-                            Terms of Service
                         </Text>
                         <Icon name="chevron-right" size={18} color={theme.colors.textTertiary} />
                     </Pressable>

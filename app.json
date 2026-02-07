@@ -27,7 +27,11 @@
     "android": {
       "softwareKeyboardLayoutMode": "pan",
       "blockAndroidUserScreenshot": false,
-      "package": "com.gamecointracker.simulator"
+      "package": "com.gamecointracker.simulator",
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/icon.png",
+        "backgroundColor": "#0F0F1A"
+      }
     },
     "plugins": [
       [

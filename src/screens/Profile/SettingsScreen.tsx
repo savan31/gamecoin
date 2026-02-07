@@ -2,6 +2,7 @@
 
 import React, { useCallback, useState } from 'react';
 import { View, Text, StyleSheet, ScrollView, Switch, Alert } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 import Animated, { FadeInDown } from 'react-native-reanimated';
 import { useAppSelector, useAppDispatch } from '../../store/hooks';
 import {
@@ -90,6 +91,7 @@ const ThemeOption: React.FC<ThemeOptionProps> = ({
 };
 
 export const SettingsScreen: React.FC = () => {
+    const navigation = useNavigation<any>();
     const dispatch = useAppDispatch();
     const { theme } = useTheme();
 
@@ -293,6 +295,28 @@ export const SettingsScreen: React.FC = () => {
                             loading={isResetting}
                             style={{ borderColor: theme.colors.error }}
                             textStyle={{ color: theme.colors.error }}
+                        />
+                    </SettingRow>
+                </Card>
+            </Animated.View>
+            
+            {/* Legal */}
+            <Animated.View entering={FadeInDown.duration(400).delay(350)}>
+                <Text style={[styles.sectionHeader, { color: theme.colors.textSecondary }]}>
+                    LEGAL
+                </Text>
+                <Card style={styles.card}>
+                    <SettingRow
+                        icon="shield"
+                        iconColor={theme.colors.success}
+                        title="Privacy Policy"
+                        subtitle="How we handle your data"
+                    >
+                        <Button
+                            title="View"
+                            onPress={() => navigation.navigate('PrivacyPolicy')}
+                            variant="outline"
+                            size="small"
                         />
                     </SettingRow>
                 </Card>
