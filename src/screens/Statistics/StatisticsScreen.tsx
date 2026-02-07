@@ -8,7 +8,7 @@ import { format, subDays, startOfDay, endOfDay, eachDayOfInterval } from 'date-f
 import { useAppSelector } from '../../store/hooks';
 import { selectAllTransactions } from '../../store/slices/transactionSlice';
 import { selectBalance } from '../../store/slices/coinSlice';
-import { selectSpinHistory, selectQuizStats } from '../../store/slices/funZoneSlice';
+import { selectSpinHistory } from '../../store/slices/funZoneSlice';
 import { useTheme } from '../../hooks/useTheme';
 import { Card } from '../../components/common/Card';
 import { DisclaimerBanner } from '../../components/disclaimers/DisclaimerBanner';
@@ -23,7 +23,6 @@ export const StatisticsScreen: React.FC = () => {
     const transactions = useAppSelector(selectAllTransactions);
     const currentBalance = useAppSelector(selectBalance);
     const spinHistory = useAppSelector(selectSpinHistory);
-    const quizStats = useAppSelector(selectQuizStats);
 
     // Calculate weekly data
     const weeklyData = useMemo(() => {
@@ -105,6 +104,7 @@ export const StatisticsScreen: React.FC = () => {
 
         const totalSpinValue = spinHistory.reduce((sum, s) => sum + s.value, 0);
 
+        const taskTransactions = transactions.filter((t) => t.source && ['spin', 'scratch', 'daily_login', 'watch_video', 'share'].includes(t.source));
         return {
             totalAdded,
             totalSubtracted,
@@ -113,10 +113,9 @@ export const StatisticsScreen: React.FC = () => {
             totalTransactions: transactions.length,
             totalSpins: spinHistory.length,
             totalSpinValue,
-            quizHighScore: quizStats.highScore,
-            quizGamesPlayed: quizStats.totalGamesPlayed,
+            totalTasksCompleted: taskTransactions.length,
         };
-    }, [transactions, weeklyData, spinHistory, quizStats]);
+    }, [transactions, weeklyData, spinHistory]);
 
     const chartTheme = {
         ...VictoryTheme.material,
@@ -138,7 +137,7 @@ export const StatisticsScreen: React.FC = () => {
             showsVerticalScrollIndicator={false}
         >
             <DisclaimerBanner
-                text="All statistics are based on simulated virtual coins."
+                text="All statistics are based on simulated RBX."
                 variant="info"
                 style={styles.disclaimer}
             />
@@ -287,7 +286,7 @@ export const StatisticsScreen: React.FC = () => {
                             </View>
                             <View>
                                 <Text style={[styles.funZoneStatValue, { color: theme.colors.text }]}>
-                                    {formatNumber(summaryStats.totalSpinValue)} VC
+                                    {formatNumber(summaryStats.totalSpinValue)} RBX
                                 </Text>
                                 <Text style={[styles.funZoneStatLabel, { color: theme.colors.textSecondary }]}>
                                     Total from Spins (Simulated)
@@ -295,15 +294,15 @@ export const StatisticsScreen: React.FC = () => {
                             </View>
                         </View>
                         <View style={styles.funZoneStatItem}>
-                            <View style={[styles.funZoneIcon, { backgroundColor: `${theme.colors.info}20` }]}>
-                                <Text style={{ fontSize: 20 }}>🎯</Text>
+                            <View style={[styles.funZoneIcon, { backgroundColor: `${theme.colors.success}20` }]}>
+                                <Text style={{ fontSize: 20 }}>✅</Text>
                             </View>
                             <View>
                                 <Text style={[styles.funZoneStatValue, { color: theme.colors.text }]}>
-                                    {summaryStats.quizHighScore} / 10
+                                    {summaryStats.totalTasksCompleted}
                                 </Text>
                                 <Text style={[styles.funZoneStatLabel, { color: theme.colors.textSecondary }]}>
-                                    Quiz High Score ({summaryStats.quizGamesPlayed} games)
+                                    Tasks Completed
                                 </Text>
                             </View>
                         </View>
@@ -321,7 +320,7 @@ export const StatisticsScreen: React.FC = () => {
                         <View style={styles.insightItem}>
                             <Text style={styles.insightIcon}>📊</Text>
                             <Text style={[styles.insightText, { color: theme.colors.textSecondary }]}>
-                                You've tracked {summaryStats.totalTransactions} virtual transactions
+                                You've tracked {summaryStats.totalTransactions} RBX transactions
                             </Text>
                         </View>
                         <View style={styles.insightItem}>

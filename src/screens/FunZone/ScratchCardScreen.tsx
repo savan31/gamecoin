@@ -20,6 +20,7 @@ import {
     revealScratchCard,
     saveFunZoneData,
 } from '../../store/slices/funZoneSlice';
+import { addTaskReward } from '../../store/thunks/taskRewardsThunk';
 import { selectHapticsEnabled } from '../../store/slices/settingsSlice';
 import { useTheme } from '../../hooks/useTheme';
 import { Card } from '../../components/common/Card';
@@ -71,6 +72,16 @@ export const ScratchCardScreen: React.FC = () => {
                 setIsRevealed(true);
                 dispatch(revealScratchCard());
                 dispatch(saveFunZoneData());
+
+                if (scratchCard) {
+                    dispatch(
+                        addTaskReward({
+                            amount: scratchCard.value,
+                            source: 'scratch',
+                            description: `Scratch Card: +${scratchCard.value} RBX`,
+                        })
+                    );
+                }
 
                 if (hapticsEnabled) {
                     Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
@@ -151,7 +162,7 @@ export const ScratchCardScreen: React.FC = () => {
                                     {scratchCard.value}
                                 </Text>
                                 <Text style={[styles.prizeUnit, { color: theme.colors.textSecondary }]}>
-                                    Virtual Coins
+                                    RBX
                                 </Text>
                             </View>
 

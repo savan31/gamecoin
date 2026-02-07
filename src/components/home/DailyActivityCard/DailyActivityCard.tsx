@@ -14,8 +14,14 @@ import { Icon } from '../../common/Icon';
 interface DailyActivityCardProps {
     spinsRemaining: number;
     scratchesRemaining: number;
+    dailyLoginClaimed: boolean;
+    dailyVideosWatched: number;
+    dailyShareClaimed: boolean;
     onSpinPress: () => void;
     onScratchPress: () => void;
+    onDailyLoginPress: () => void;
+    onWatchVideoPress: () => void;
+    onSharePress: () => void;
 }
 
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
@@ -27,6 +33,7 @@ interface ActivityItemProps {
     maxCount: number;
     color: string;
     onPress: () => void;
+    statusOverride?: string;
 }
 
 const ActivityItem: React.FC<ActivityItemProps> = ({
@@ -36,6 +43,7 @@ const ActivityItem: React.FC<ActivityItemProps> = ({
                                                        maxCount,
                                                        color,
                                                        onPress,
+                                                       statusOverride,
                                                    }) => {
     const { theme } = useTheme();
     const scale = useSharedValue(1);
@@ -77,7 +85,7 @@ const ActivityItem: React.FC<ActivityItemProps> = ({
                         {title}
                     </Text>
                     <Text style={[styles.activityStatus, { color: theme.colors.textSecondary }]}>
-                        {remaining} of {maxCount} remaining
+                        {statusOverride ?? `${remaining} of ${maxCount} remaining`}
                     </Text>
                 </View>
             </View>
@@ -103,8 +111,14 @@ const ActivityItem: React.FC<ActivityItemProps> = ({
 export const DailyActivityCard: React.FC<DailyActivityCardProps> = ({
                                                                         spinsRemaining,
                                                                         scratchesRemaining,
+                                                                        dailyLoginClaimed,
+                                                                        dailyVideosWatched,
+                                                                        dailyShareClaimed,
                                                                         onSpinPress,
                                                                         onScratchPress,
+                                                                        onDailyLoginPress,
+                                                                        onWatchVideoPress,
+                                                                        onSharePress,
                                                                     }) => {
     const { theme } = useTheme();
 
@@ -135,6 +149,33 @@ export const DailyActivityCard: React.FC<DailyActivityCardProps> = ({
                     maxCount={2}
                     color={theme.colors.success}
                     onPress={onScratchPress}
+                />
+                <ActivityItem
+                    title="Daily Login"
+                    icon="home"
+                    remaining={dailyLoginClaimed ? 0 : 1}
+                    maxCount={1}
+                    color={theme.colors.primary}
+                    onPress={onDailyLoginPress}
+                    statusOverride="35 RBX once/day"
+                />
+                <ActivityItem
+                    title="Watch Video"
+                    icon="play"
+                    remaining={2 - dailyVideosWatched}
+                    maxCount={2}
+                    color="#EC4899"
+                    onPress={onWatchVideoPress}
+                    statusOverride="30-80 RBX (2/day)"
+                />
+                <ActivityItem
+                    title="Share & Earn"
+                    icon="refresh"
+                    remaining={dailyShareClaimed ? 0 : 1}
+                    maxCount={1}
+                    color={theme.colors.success}
+                    onPress={onSharePress}
+                    statusOverride="50-100 RBX once/day"
                 />
             </View>
 

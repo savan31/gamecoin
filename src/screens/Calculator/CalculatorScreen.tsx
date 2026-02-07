@@ -98,7 +98,7 @@ export const CalculatorScreen: React.FC = () => {
                 <Animated.View entering={FadeInDown.duration(400).delay(200)}>
                     <Card style={styles.inputCard}>
                         <Text style={[styles.cardTitle, { color: theme.colors.text }]}>
-                            Virtual Coin Amount
+                            RBX Amount
                         </Text>
                         <Input
                             value={coinInput}
@@ -156,10 +156,10 @@ export const CalculatorScreen: React.FC = () => {
 
                         <View style={styles.ratesInfo}>
                             <Text style={[styles.rateText, { color: theme.colors.textTertiary }]}>
-                                Rate: {conversionRates.usdRate} VC = $1.00
+                                Rate: {conversionRates.usdRate} RBX = $1.00
                             </Text>
                             <Text style={[styles.rateText, { color: theme.colors.textTertiary }]}>
-                                Rate: {conversionRates.inGameRate} VC = 1 item
+                                Rate: {conversionRates.inGameRate} RBX = 1 item
                             </Text>
                         </View>
                     </Card>

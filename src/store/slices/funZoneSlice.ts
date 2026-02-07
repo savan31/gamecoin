@@ -16,12 +16,6 @@ interface ScratchResult {
     timestamp: string;
 }
 
-interface QuizState {
-    highScore: number;
-    totalGamesPlayed: number;
-    lastPlayedDate: string | null;
-}
-
 interface FunZoneState {
     // Spin Wheel
     spinHistory: SpinResult[];
@@ -33,8 +27,13 @@ interface FunZoneState {
     lastScratchDate: string | null;
     dailyScratchesRemaining: number;
 
-    // Quiz
-    quiz: QuizState;
+    // Crypto-style tasks
+    dailyLoginClaimed: boolean;
+    lastLoginDate: string | null;
+    dailyVideosWatched: number;
+    lastVideoDate: string | null;
+    dailyShareClaimed: boolean;
+    lastShareDate: string | null;
 
     // General
     isLoading: boolean;
@@ -42,6 +41,7 @@ interface FunZoneState {
 
 const MAX_DAILY_SPINS = 3;
 const MAX_DAILY_SCRATCHES = 2;
+const MAX_DAILY_VIDEOS = 2;
 
 const initialState: FunZoneState = {
     spinHistory: [],
@@ -52,11 +52,12 @@ const initialState: FunZoneState = {
     lastScratchDate: null,
     dailyScratchesRemaining: MAX_DAILY_SCRATCHES,
 
-    quiz: {
-        highScore: 0,
-        totalGamesPlayed: 0,
-        lastPlayedDate: null,
-    },
+    dailyLoginClaimed: false,
+    lastLoginDate: null,
+    dailyVideosWatched: 0,
+    lastVideoDate: null,
+    dailyShareClaimed: false,
+    lastShareDate: null,
 
     isLoading: false,
 };
@@ -145,12 +146,41 @@ const funZoneSlice = createSlice({
             }
         },
 
-        // Quiz
-        updateQuizScore: (state, action: PayloadAction<number>) => {
-            state.quiz.totalGamesPlayed += 1;
-            state.quiz.lastPlayedDate = new Date().toISOString();
-            if (action.payload > state.quiz.highScore) {
-                state.quiz.highScore = action.payload;
+        // Crypto-style tasks
+        claimDailyLogin: (state) => {
+            const now = new Date().toISOString();
+            state.dailyLoginClaimed = true;
+            state.lastLoginDate = now;
+        },
+        resetDailyLogin: (state) => {
+            const lastLogin = state.lastLoginDate ? new Date(state.lastLoginDate) : null;
+            const now = new Date();
+            if (!lastLogin || !isSameDay(lastLogin, now)) {
+                state.dailyLoginClaimed = false;
+            }
+        },
+        recordVideoWatch: (state) => {
+            const now = new Date().toISOString();
+            state.dailyVideosWatched = Math.min(state.dailyVideosWatched + 1, MAX_DAILY_VIDEOS);
+            state.lastVideoDate = now;
+        },
+        resetDailyVideos: (state) => {
+            const lastVideo = state.lastVideoDate ? new Date(state.lastVideoDate) : null;
+            const now = new Date();
+            if (!lastVideo || !isSameDay(lastVideo, now)) {
+                state.dailyVideosWatched = 0;
+            }
+        },
+        claimShare: (state) => {
+            const now = new Date().toISOString();
+            state.dailyShareClaimed = true;
+            state.lastShareDate = now;
+        },
+        resetDailyShare: (state) => {
+            const lastShare = state.lastShareDate ? new Date(state.lastShareDate) : null;
+            const now = new Date();
+            if (!lastShare || !isSameDay(lastShare, now)) {
+                state.dailyShareClaimed = false;
             }
         },
 
@@ -180,7 +210,12 @@ export const {
     generateScratchCard,
     revealScratchCard,
     resetDailyScratches,
-    updateQuizScore,
+    claimDailyLogin,
+    resetDailyLogin,
+    recordVideoWatch,
+    resetDailyVideos,
+    claimShare,
+    resetDailyShare,
     resetAllFunZoneData,
 } = funZoneSlice.actions;
 
@@ -195,5 +230,9 @@ export const selectScratchCard = (state: { funZone: FunZoneState }) =>
     state.funZone.scratchCard;
 export const selectDailyScratchesRemaining = (state: { funZone: FunZoneState }) =>
     state.funZone.dailyScratchesRemaining;
-export const selectQuizStats = (state: { funZone: FunZoneState }) =>
-    state.funZone.quiz;
+export const selectDailyLoginClaimed = (state: { funZone: FunZoneState }) =>
+    state.funZone.dailyLoginClaimed;
+export const selectDailyVideosWatched = (state: { funZone: FunZoneState }) =>
+    state.funZone.dailyVideosWatched;
+export const selectDailyShareClaimed = (state: { funZone: FunZoneState }) =>
+    state.funZone.dailyShareClaimed;

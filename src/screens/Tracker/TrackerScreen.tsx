@@ -85,7 +85,7 @@ export const TrackerScreen: React.FC = () => {
             >
                 <Animated.View entering={FadeInDown.duration(400).delay(100)}>
                     <DisclaimerBanner
-                        text="All coins are virtual and for simulation purposes only."
+                        text="All RBX are simulated for entertainment purposes only."
                         variant="info"
                     />
                 </Animated.View>
@@ -140,7 +140,7 @@ export const TrackerScreen: React.FC = () => {
                         </View>
                         <TransactionList
                             transactions={recentTransactions}
-                            emptyMessage="No transactions yet. Start tracking your virtual coins!"
+                            emptyMessage="No transactions yet. Start tracking your RBX!"
                         />
                     </Card>
                 </Animated.View>

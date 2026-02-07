@@ -37,11 +37,12 @@ interface FunZoneData {
     scratchCard: { value: number; revealed: boolean; timestamp: string } | null;
     lastScratchDate: string | null;
     dailyScratchesRemaining: number;
-    quiz: {
-        highScore: number;
-        totalGamesPlayed: number;
-        lastPlayedDate: string | null;
-    };
+    dailyLoginClaimed: boolean;
+    lastLoginDate: string | null;
+    dailyVideosWatched: number;
+    lastVideoDate: string | null;
+    dailyShareClaimed: boolean;
+    lastShareDate: string | null;
 }
 
 interface UserData {

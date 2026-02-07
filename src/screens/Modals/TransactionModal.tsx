@@ -89,14 +89,14 @@ export const TransactionModal: React.FC = () => {
             <View style={styles.content}>
                 <Card style={styles.card}>
                     <Text style={[styles.title, { color: theme.colors.text }]}>
-                        {isAdd ? 'Add Virtual Coins' : 'Subtract Virtual Coins'}
+                        {isAdd ? 'Add RBX' : 'Subtract RBX'}
                     </Text>
 
                     <Text style={[styles.balanceLabel, { color: theme.colors.textSecondary }]}>
                         Current Balance
                     </Text>
                     <Text style={[styles.balanceValue, { color: theme.colors.primary }]}>
-                        {currentBalance.toLocaleString()} VC
+                        {currentBalance.toLocaleString()} RBX
                     </Text>
 
                     <Input
@@ -153,7 +153,7 @@ export const TransactionModal: React.FC = () => {
                 </View>
 
                 <Text style={[styles.disclaimer, { color: theme.colors.textTertiary }]}>
-                    All coins are virtual and simulated. No real value.
+                    All RBX are simulated. No real value.
                 </Text>
             </View>
         </KeyboardAvoidingView>

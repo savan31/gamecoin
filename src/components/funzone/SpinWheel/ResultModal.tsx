@@ -97,7 +97,7 @@ export const ResultModal: React.FC<ResultModalProps> = ({
                             style={[styles.valueBadge, { backgroundColor: result.color }]}
                         >
                             <Text style={styles.valueText}>{result.value}</Text>
-                            <Text style={styles.valueLabel}>Virtual Coins</Text>
+                            <Text style={styles.valueLabel}>RBX</Text>
                         </View>
                     </Animated.View>
 

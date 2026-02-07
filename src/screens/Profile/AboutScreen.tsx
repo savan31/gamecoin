@@ -53,7 +53,7 @@ export const AboutScreen: React.FC = () => {
             <Animated.View entering={FadeInDown.duration(400).delay(200)}>
                 <Card style={styles.descriptionCard}>
                     <Text style={[styles.descriptionText, { color: theme.colors.textSecondary }]}>
-                        Track, calculate, and simulate your virtual gaming coins — just for fun.
+                        Track, calculate, and simulate your RBX — just for fun.
                         This app is a fan-made simulator designed for entertainment purposes only.
                     </Text>
                 </Card>
@@ -70,7 +70,7 @@ export const AboutScreen: React.FC = () => {
                             <Icon name="wallet" size={18} color={theme.colors.success} />
                         </View>
                         <Text style={[styles.featureText, { color: theme.colors.textSecondary }]}>
-                            Virtual coin tracking with transaction history
+                            RBX tracking with transaction history
                         </Text>
                     </View>
 

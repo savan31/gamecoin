@@ -19,7 +19,7 @@ interface BalanceCardProps {
     dailyChange: number;
     changePercentage: number;
     /**
-     * When true, show the VC logo instead of the "VC" currency text.
+     * When true, show the RBX logo instead of the "RBX" currency text.
      * Used on the Home screen only.
      */
     showLogo?: boolean;
@@ -53,7 +53,7 @@ export const BalanceCard: React.FC<BalanceCardProps> = ({
         <Card style={styles.container} gradient>
             <View style={styles.header}>
                 <Text style={[styles.label, { color: theme.colors.textSecondary }]}>
-                    Virtual Balance
+                    RBX Balance
                 </Text>
                 <View style={styles.simulatedBadge}>
                     <Text style={styles.simulatedText}>SIMULATED</Text>
@@ -74,7 +74,7 @@ export const BalanceCard: React.FC<BalanceCardProps> = ({
                             { color: theme.colors.primary },
                         ]}
                     >
-                        VC
+                        RBX
                     </Text>
                 )}
                 <Text style={[styles.balanceValue, { color: theme.colors.text }]}>
@@ -100,7 +100,7 @@ export const BalanceCard: React.FC<BalanceCardProps> = ({
             </Animated.View>
 
             <Text style={[styles.disclaimer, { color: theme.colors.textTertiary }]}>
-                Virtual coins have no real-world value
+                RBX has no real-world value
             </Text>
         </Card>
     );

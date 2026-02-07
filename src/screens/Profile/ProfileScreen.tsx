@@ -8,7 +8,7 @@ import { useAppSelector, useAppDispatch } from '../../store/hooks';
 import { selectUsername, selectAvatarIndex, setUsername, setAvatarIndex, saveUserData } from '../../store/slices/userSlice';
 import { selectBalance } from '../../store/slices/coinSlice';
 import { selectAllTransactions } from '../../store/slices/transactionSlice';
-import { selectQuizStats, selectSpinHistory } from '../../store/slices/funZoneSlice';
+import { selectSpinHistory } from '../../store/slices/funZoneSlice';
 import { useTheme } from '../../hooks/useTheme';
 import { Card } from '../../components/common/Card';
 import { Button } from '../../components/common/Button';
@@ -74,8 +74,9 @@ export const ProfileScreen: React.FC = () => {
     const avatarIndex = useAppSelector(selectAvatarIndex);
     const balance = useAppSelector(selectBalance);
     const transactions = useAppSelector(selectAllTransactions);
-    const quizStats = useAppSelector(selectQuizStats);
     const spinHistory = useAppSelector(selectSpinHistory);
+
+    const taskCount = transactions.filter((t) => t.source && ['spin', 'scratch', 'daily_login', 'watch_video', 'share'].includes(t.source)).length;
 
     const [showEditModal, setShowEditModal] = useState(false);
     const [editUsername, setEditUsername] = useState(username);
@@ -129,7 +130,7 @@ export const ProfileScreen: React.FC = () => {
                                     {formatCompactNumber(balance)}
                                 </Text>
                                 <Text style={[styles.statLabel, { color: theme.colors.textSecondary }]}>
-                                    Virtual Coins
+                                    RBX
                                 </Text>
                             </View>
                             <View style={[styles.statDivider, { backgroundColor: theme.colors.border }]} />
@@ -162,24 +163,24 @@ export const ProfileScreen: React.FC = () => {
                         </Text>
                         <View style={styles.quickStats}>
                             <View style={styles.quickStatItem}>
-                                <Text style={styles.quickStatEmoji}>🎯</Text>
+                                <Text style={styles.quickStatEmoji}>✅</Text>
                                 <View>
                                     <Text style={[styles.quickStatValue, { color: theme.colors.text }]}>
-                                        {quizStats.highScore}/10
+                                        {taskCount}
                                     </Text>
                                     <Text style={[styles.quickStatLabel, { color: theme.colors.textSecondary }]}>
-                                        Quiz High Score
+                                        Tasks Completed
                                     </Text>
                                 </View>
                             </View>
                             <View style={styles.quickStatItem}>
-                                <Text style={styles.quickStatEmoji}>🎮</Text>
+                                <Text style={styles.quickStatEmoji}>🎰</Text>
                                 <View>
                                     <Text style={[styles.quickStatValue, { color: theme.colors.text }]}>
-                                        {quizStats.totalGamesPlayed}
+                                        {spinHistory.length}
                                     </Text>
                                     <Text style={[styles.quickStatLabel, { color: theme.colors.textSecondary }]}>
-                                        Games Played
+                                        Wheel Spins
                                     </Text>
                                 </View>
                             </View>

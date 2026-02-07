@@ -4,6 +4,8 @@ import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
 import { v4 as uuidv4 } from 'uuid';
 import { StorageService } from '../../services/storageService';
 
+export type TaskSource = 'spin' | 'scratch' | 'daily_login' | 'watch_video' | 'share' | 'manual';
+
 export interface Transaction {
     id: string;
     type: 'add' | 'subtract';
@@ -11,6 +13,7 @@ export interface Transaction {
     description: string;
     timestamp: string;
     balanceAfter: number;
+    source?: TaskSource;
 }
 
 interface TransactionState {
@@ -56,12 +59,13 @@ const transactionSlice = createSlice({
     reducers: {
         addTransaction: (
             state,
-            action: PayloadAction<Omit<Transaction, 'id' | 'timestamp'>>
+            action: PayloadAction<Omit<Transaction, 'id' | 'timestamp'> & { source?: TaskSource }>
         ) => {
             const newTransaction: Transaction = {
                 ...action.payload,
                 id: uuidv4(),
                 timestamp: new Date().toISOString(),
+                source: action.payload.source,
             };
             state.transactions.unshift(newTransaction);
             // Keep only last 100 transactions
@@ -119,3 +123,38 @@ export const selectTransactionsByDateRange = (
         const date = new Date(t.timestamp);
         return date >= startDate && date <= endDate;
     });
+
+const TASK_SOURCES: TaskSource[] = ['spin', 'scratch', 'daily_login', 'watch_video', 'share'];
+
+export const selectDailyTaskEarnings = (state: {
+    transactions: TransactionState;
+}) => {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    return state.transactions.transactions
+        .filter(
+            (t) =>
+                t.type === 'add' &&
+                t.source &&
+                TASK_SOURCES.includes(t.source) &&
+                new Date(t.timestamp) >= today
+        )
+        .reduce((sum, t) => sum + t.amount, 0);
+};
+
+export const selectTodayTaskTransactions = (
+    state: { transactions: TransactionState },
+    limit: number = 10
+) => {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    return state.transactions.transactions.filter(
+        (t) =>
+            t.type === 'add' &&
+            t.source &&
+            TASK_SOURCES.includes(t.source) &&
+            new Date(t.timestamp) >= today
+    ).slice(0, limit);
+};

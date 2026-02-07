@@ -122,7 +122,7 @@ export const SettingsScreen: React.FC = () => {
     const handleResetAllData = useCallback(() => {
         Alert.alert(
             'Reset All Data',
-            'This will permanently delete all your virtual coins, transactions, and settings. This action cannot be undone.',
+            'This will permanently delete all your RBX, transactions, and settings. This action cannot be undone.',
             [
                 {
                     text: 'Cancel',

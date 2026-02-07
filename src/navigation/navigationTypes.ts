@@ -25,7 +25,9 @@ export type FunZoneStackParamList = {
     FunZoneMain: undefined;
     SpinWheel: undefined;
     ScratchCard: undefined;
-    Quiz: undefined;
+    DailyLogin: undefined;
+    WatchVideo: undefined;
+    Share: undefined;
 };
 
 // Profile Stack

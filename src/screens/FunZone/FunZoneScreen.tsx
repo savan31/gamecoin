@@ -13,6 +13,9 @@ import { useAppSelector } from '../../store/hooks';
 import {
     selectDailySpinsRemaining,
     selectDailyScratchesRemaining,
+    selectDailyLoginClaimed,
+    selectDailyVideosWatched,
+    selectDailyShareClaimed,
 } from '../../store/slices/funZoneSlice';
 import { useTheme } from '../../hooks/useTheme';
 import { Card } from '../../components/common/Card';
@@ -122,6 +125,9 @@ export const FunZoneScreen: React.FC = () => {
 
     const dailySpinsRemaining = useAppSelector(selectDailySpinsRemaining);
     const dailyScratchesRemaining = useAppSelector(selectDailyScratchesRemaining);
+    const dailyLoginClaimed = useAppSelector(selectDailyLoginClaimed);
+    const dailyVideosWatched = useAppSelector(selectDailyVideosWatched);
+    const dailyShareClaimed = useAppSelector(selectDailyShareClaimed);
 
     return (
         <View style={[styles.container, { backgroundColor: theme.colors.background }]}>
@@ -156,7 +162,7 @@ export const FunZoneScreen: React.FC = () => {
                 <View style={styles.gamesContainer}>
                     <GameCard
                         title="Spin Wheel"
-                        description="Spin the wheel and see what virtual coins you get!"
+                        description="Spin the wheel and see what RBX you get!"
                         icon="disc"
                         emoji="🎰"
                         color={theme.colors.warning}
@@ -179,13 +185,39 @@ export const FunZoneScreen: React.FC = () => {
                     />
 
                     <GameCard
-                        title="Quiz Challenge"
-                        description="Test your gaming knowledge with trivia!"
-                        icon="check"
-                        emoji="🎯"
-                        color={theme.colors.info}
-                        onPress={() => navigation.navigate('Quiz')}
+                        title="Daily Login"
+                        description="Claim RBX for logging in today!"
+                        icon="home"
+                        emoji="📅"
+                        color={theme.colors.primary}
+                        remaining={dailyLoginClaimed ? 0 : 1}
+                        maxCount={1}
+                        onPress={() => navigation.navigate('DailyLogin')}
                         delay={400}
+                    />
+
+                    <GameCard
+                        title="Watch Video"
+                        description="Simulate watching to earn 30-80 RBX!"
+                        icon="play"
+                        emoji="▶️"
+                        color="#EC4899"
+                        remaining={2 - dailyVideosWatched}
+                        maxCount={2}
+                        onPress={() => navigation.navigate('WatchVideo')}
+                        delay={500}
+                    />
+
+                    <GameCard
+                        title="Share & Earn"
+                        description="Simulate sharing for 50-100 RBX!"
+                        icon="refresh"
+                        emoji="📤"
+                        color={theme.colors.success}
+                        remaining={dailyShareClaimed ? 0 : 1}
+                        maxCount={1}
+                        onPress={() => navigation.navigate('Share')}
+                        delay={600}
                     />
                 </View>
 

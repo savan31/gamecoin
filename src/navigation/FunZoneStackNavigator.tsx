@@ -6,7 +6,9 @@ import { useTheme } from '../hooks/useTheme';
 import { FunZoneScreen } from '../screens/FunZone/FunZoneScreen';
 import { SpinWheelScreen } from '../screens/FunZone/SpinWheelScreen';
 import { ScratchCardScreen } from '../screens/FunZone/ScratchCardScreen';
-import { QuizScreen } from '../screens/FunZone/QuizScreen';
+import { DailyLoginScreen } from '../screens/FunZone/DailyLoginScreen';
+import { WatchVideoScreen } from '../screens/FunZone/WatchVideoScreen';
+import { ShareScreen } from '../screens/FunZone/ShareScreen';
 import type { FunZoneStackParamList } from './navigationTypes';
 
 const Stack = createNativeStackNavigator<FunZoneStackParamList>();
@@ -45,9 +47,19 @@ export const FunZoneStackNavigator: React.FC = () => {
                 options={{ headerTitle: 'Scratch Card' }}
             />
             <Stack.Screen
-                name="Quiz"
-                component={QuizScreen}
-                options={{ headerTitle: 'Quiz Challenge' }}
+                name="DailyLogin"
+                component={DailyLoginScreen}
+                options={{ headerTitle: 'Daily Login' }}
+            />
+            <Stack.Screen
+                name="WatchVideo"
+                component={WatchVideoScreen}
+                options={{ headerTitle: 'Watch Video' }}
+            />
+            <Stack.Screen
+                name="Share"
+                component={ShareScreen}
+                options={{ headerTitle: 'Share & Earn' }}
             />
         </Stack.Navigator>
     );

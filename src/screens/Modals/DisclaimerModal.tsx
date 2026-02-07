@@ -74,7 +74,7 @@ export const DisclaimerModal: React.FC = () => {
                     <View style={styles.bulletItem}>
                         <Icon name="check" size={20} color={theme.colors.success} />
                         <Text style={[styles.bulletText, { color: theme.colors.textSecondary }]}>
-                            All coins and values are 100% virtual
+                            All RBX and values are 100% simulated
                         </Text>
                     </View>
                     <View style={styles.bulletItem}>

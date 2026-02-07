@@ -60,6 +60,6 @@ describe('BalanceCard', () => {
             <BalanceCard balance={1000} dailyChange={0} changePercentage={0} />
         );
 
-        expect(getByText('Virtual coins have no real-world value')).toBeTruthy();
+        expect(getByText('RBX has no real-world value')).toBeTruthy();
     });
 });

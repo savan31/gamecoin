@@ -6,14 +6,25 @@ import Animated, { FadeInDown, FadeInRight } from 'react-native-reanimated';
 import { useNavigation } from '@react-navigation/native';
 import { useAppSelector, useAppDispatch } from '../../store/hooks';
 import { selectBalance, selectDailyChange, loadCoinData } from '../../store/slices/coinSlice';
-import { selectRecentTransactions, loadTransactions } from '../../store/slices/transactionSlice';
+import {
+    selectRecentTransactions,
+    selectDailyTaskEarnings,
+    selectTodayTaskTransactions,
+    loadTransactions,
+} from '../../store/slices/transactionSlice';
 import { selectUsername } from '../../store/slices/userSlice';
 import {
     selectDailySpinsRemaining,
     selectDailyScratchesRemaining,
+    selectDailyLoginClaimed,
+    selectDailyVideosWatched,
+    selectDailyShareClaimed,
     loadFunZoneData,
     resetDailySpins,
     resetDailyScratches,
+    resetDailyLogin,
+    resetDailyVideos,
+    resetDailyShare,
 } from '../../store/slices/funZoneSlice';
 import { selectHasAcceptedDisclaimer } from '../../store/slices/settingsSlice';
 import { useTheme } from '../../hooks/useTheme';
@@ -23,6 +34,7 @@ import { BalanceCard } from '../../components/tracker/BalanceCard';
 import { DisclaimerBanner } from '../../components/disclaimers/DisclaimerBanner';
 import { QuickActionCard } from '../../components/home/QuickActionCard';
 import { DailyActivityCard } from '../../components/home/DailyActivityCard';
+import { DailyEarningsCard } from '../../components/home/DailyEarningsCard';
 import { formatNumber, getGreeting } from '../../utils/formatters';
 import { LEGAL_DISCLAIMERS } from '../../constants/legal';
 import type { HomeScreenProps } from '../../navigation/navigationTypes';
@@ -41,8 +53,13 @@ export const HomeScreen: React.FC = () => {
     const recentTransactions = useAppSelector((state) =>
         selectRecentTransactions(state, 3)
     );
+    const dailyTaskEarnings = useAppSelector(selectDailyTaskEarnings);
+    const todayTaskTransactions = useAppSelector(selectTodayTaskTransactions);
     const dailySpinsRemaining = useAppSelector(selectDailySpinsRemaining);
     const dailyScratchesRemaining = useAppSelector(selectDailyScratchesRemaining);
+    const dailyLoginClaimed = useAppSelector(selectDailyLoginClaimed);
+    const dailyVideosWatched = useAppSelector(selectDailyVideosWatched);
+    const dailyShareClaimed = useAppSelector(selectDailyShareClaimed);
     const hasAcceptedDisclaimer = useAppSelector(selectHasAcceptedDisclaimer);
 
     // Initialize app data
@@ -57,6 +74,9 @@ export const HomeScreen: React.FC = () => {
             // Reset daily limits if needed
             dispatch(resetDailySpins());
             dispatch(resetDailyScratches());
+            dispatch(resetDailyLogin());
+            dispatch(resetDailyVideos());
+            dispatch(resetDailyShare());
 
             setIsInitialized(true);
         };
@@ -80,6 +100,9 @@ export const HomeScreen: React.FC = () => {
         ]);
         dispatch(resetDailySpins());
         dispatch(resetDailyScratches());
+        dispatch(resetDailyLogin());
+        dispatch(resetDailyVideos());
+        dispatch(resetDailyShare());
         setRefreshing(false);
     }, [dispatch]);
 
@@ -144,6 +167,17 @@ export const HomeScreen: React.FC = () => {
                     />
                 </Animated.View>
 
+                {/* Daily Earnings */}
+                <Animated.View
+                    entering={FadeInDown.duration(400).delay(250)}
+                    style={styles.section}
+                >
+                    <DailyEarningsCard
+                        dailyEarnings={dailyTaskEarnings}
+                        todayTaskCount={todayTaskTransactions.length}
+                    />
+                </Animated.View>
+
                 {/* Quick Actions */}
                 <Animated.View
                     entering={FadeInDown.duration(400).delay(300)}
@@ -200,6 +234,9 @@ export const HomeScreen: React.FC = () => {
                     <DailyActivityCard
                         spinsRemaining={dailySpinsRemaining}
                         scratchesRemaining={dailyScratchesRemaining}
+                        dailyLoginClaimed={dailyLoginClaimed}
+                        dailyVideosWatched={dailyVideosWatched}
+                        dailyShareClaimed={dailyShareClaimed}
                         onSpinPress={() => navigation.navigate('MainTabs', {
                             screen: 'FunZoneTab',
                             params: { screen: 'SpinWheel' },
@@ -207,6 +244,18 @@ export const HomeScreen: React.FC = () => {
                         onScratchPress={() => navigation.navigate('MainTabs', {
                             screen: 'FunZoneTab',
                             params: { screen: 'ScratchCard' },
+                        })}
+                        onDailyLoginPress={() => navigation.navigate('MainTabs', {
+                            screen: 'FunZoneTab',
+                            params: { screen: 'DailyLogin' },
+                        })}
+                        onWatchVideoPress={() => navigation.navigate('MainTabs', {
+                            screen: 'FunZoneTab',
+                            params: { screen: 'WatchVideo' },
+                        })}
+                        onSharePress={() => navigation.navigate('MainTabs', {
+                            screen: 'FunZoneTab',
+                            params: { screen: 'Share' },
                         })}
                     />
                 </Animated.View>
@@ -307,7 +356,7 @@ export const HomeScreen: React.FC = () => {
                                 <Text
                                     style={[styles.emptyActivityHint, { color: theme.colors.textTertiary }]}
                                 >
-                                    Start tracking your virtual coins!
+                                    Start tracking your RBX!
                                 </Text>
                             </View>
                         )}

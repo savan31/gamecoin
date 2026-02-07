@@ -20,6 +20,7 @@ import {
     recordSpin,
     saveFunZoneData,
 } from '../../store/slices/funZoneSlice';
+import { addTaskReward } from '../../store/thunks/taskRewardsThunk';
 import { selectSoundEnabled, selectHapticsEnabled } from '../../store/slices/settingsSlice';
 import { useTheme } from '../../hooks/useTheme';
 import { Card } from '../../components/common/Card';
@@ -94,6 +95,14 @@ export const SpinWheelScreen: React.FC = () => {
 
         dispatch(recordSpin({ value: segment.value, label: segment.label }));
         dispatch(saveFunZoneData());
+
+        dispatch(
+            addTaskReward({
+                amount: segment.value,
+                source: 'spin',
+                description: `Spin Wheel: +${segment.value} RBX`,
+            })
+        );
 
         triggerHaptic('success');
     }, [dispatch, triggerHaptic]);
