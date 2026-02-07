@@ -20,6 +20,7 @@ type TaskItem = {
     icon: string;
     screen: string;
     color: string;
+    url?: string;
 };
 
 const TASKS: TaskItem[] = [
@@ -59,14 +60,65 @@ const TASKS: TaskItem[] = [
         screen: 'ShareScreen',
         color: '#F59E0B',
     },
+    {
+        id: 'scratch_card',
+        title: 'Scratch Card',
+        description: 'Scratch and find rewards',
+        reward: '200 RBX',
+        icon: 'grid',
+        screen: 'TaskDetailScreen',
+        color: '#8B5CF6',
+    },
+    {
+        id: 'math_master',
+        title: 'Math Master',
+        description: 'Solve to earn bonus',
+        reward: '250 RBX',
+        icon: 'cpu',
+        screen: 'TaskDetailScreen',
+        color: '#EF4444',
+    },
+    {
+        id: 'tap_challenge',
+        title: 'Tap Challenge',
+        description: 'Tap fast, earn more',
+        reward: '300 RBX',
+        icon: 'zap',
+        screen: 'TaskDetailScreen',
+        color: '#F59E0B',
+    },
+    {
+        id: 'guess_number',
+        title: 'Guess Number',
+        description: 'Pick the lucky number',
+        reward: '500 RBX',
+        icon: 'target',
+        screen: 'TaskDetailScreen',
+        color: '#10B981',
+    },
 ];
 
 export const EarnScreen: React.FC = () => {
     const navigation = useNavigation<any>();
     const { theme } = useTheme();
 
-    const handleTaskPress = (screen: string) => {
-        navigation.navigate(screen);
+    const handleTaskPress = (task: TaskItem) => {
+        if (task.screen === 'TaskDetailScreen') {
+            // Pass task data for generic task detail screen
+            navigation.navigate('TaskDetailScreen', {
+                task: {
+                    id: task.id,
+                    title: task.title,
+                    description: task.description,
+                    reward: parseInt(task.reward.replace(/\D/g, '')),
+                    icon: task.icon,
+                    source: task.id,
+                    url: task.url,
+                },
+            });
+        } else {
+            navigation.navigate(task.screen);
+        }
     };
 
     return (
@@ -101,7 +153,7 @@ export const EarnScreen: React.FC = () => {
                             style={[styles.taskCardWrapper, { width: CARD_WIDTH }]}
                         >
                             <Pressable
-                                onPress={() => handleTaskPress(task.screen)}
+                                onPress={() => handleTaskPress(task)}
                                 style={({ pressed }) => [
                                     styles.pressable,
                                     pressed && styles.pressed,
