@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, ScrollView, ActivityIndicator, Linking } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, ActivityIndicator, Linking, Dimensions } from 'react-native';
 import Animated, { FadeInDown, Layout } from 'react-native-reanimated';
 import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
 import { useAppDispatch } from '../../store/hooks';
@@ -19,6 +19,9 @@ export const TaskDetailScreen: React.FC = () => {
     const dispatch = useAppDispatch();
     const { theme } = useTheme();
     const { task } = route.params;
+    const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
+    const isSmallDevice = SCREEN_WIDTH < 360;
+    const isShortDevice = SCREEN_HEIGHT < 700;
 
     const [status, setStatus] = useState<'processing' | 'ready_to_claim' | 'completed'>('processing');
     const [progress, setProgress] = useState(0);
@@ -233,13 +236,19 @@ export const TaskDetailScreen: React.FC = () => {
             <ScrollView contentContainerStyle={styles.content}>
                 
                 {/* Header Section */}
-                <Animated.View entering={FadeInDown.duration(500)} style={styles.header}>
-                    <View style={[styles.iconContainer, { backgroundColor: `${theme.colors.primary}20` }]}>
-                        <Icon name={task.icon} size={64} color={theme.colors.primary} />
+                <Animated.View entering={FadeInDown.duration(500)} style={[styles.header, isShortDevice && { marginBottom: 16 }]}>
+                    <View style={[
+                        styles.iconContainer, 
+                        { backgroundColor: `${theme.colors.primary}20` },
+                        isShortDevice && { width: 80, height: 80, marginBottom: 16 }
+                    ]}>
+                        <Icon name={task.icon} size={isShortDevice ? 40 : 64} color={theme.colors.primary} />
                     </View>
-                    <Text style={[styles.title, { color: theme.colors.text }]}>{task.title}</Text>
+                    <Text style={[styles.title, { color: theme.colors.text }, isSmallDevice && { fontSize: 22 }]}>
+                        {task.title}
+                    </Text>
                     <View style={styles.rewardBadge}>
-                        <Text style={[styles.rewardText, { color: theme.colors.success }]}>
+                        <Text style={[styles.rewardText, { color: theme.colors.success }, isSmallDevice && { fontSize: 16 }]}>
                             +{task.reward} RBX
                         </Text>
                     </View>
@@ -304,62 +313,51 @@ const styles = StyleSheet.create({
         flex: 1,
     },
     content: {
-        padding: 24,
+        padding: 20,
         alignItems: 'center',
     },
     header: {
         alignItems: 'center',
-        marginBottom: 32,
-    },
-    iconContainer: {
-        width: 120,
-        height: 120,
-        borderRadius: 60,
-        justifyContent: 'center',
-        alignItems: 'center',
         marginBottom: 24,
     },
+    iconContainer: {
+        width: 100,
+        height: 100,
+        borderRadius: 50,
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginBottom: 20,
+    },
     title: {
-        fontSize: 28,
+        fontSize: 24,
         fontWeight: '700',
         marginBottom: 8,
         textAlign: 'center',
     },
     rewardBadge: {
         backgroundColor: 'rgba(16, 185, 129, 0.1)',
-        paddingHorizontal: 16,
-        paddingVertical: 6,
-        borderRadius: 20,
+        paddingHorizontal: 14,
+        paddingVertical: 4,
+        borderRadius: 16,
     },
     rewardText: {
-        fontSize: 18,
+        fontSize: 16,
         fontWeight: '700',
     },
     instructionCard: {
         width: '100%',
-        padding: 24,
-        marginBottom: 32,
+        padding: 16,
+        marginBottom: 24,
     },
     sectionTitle: {
-        fontSize: 18,
+        fontSize: 16,
         fontWeight: '600',
-        marginBottom: 12,
+        marginBottom: 8,
     },
     description: {
-        fontSize: 15,
-        lineHeight: 22,
-        marginBottom: 20,
-    },
-    steps: {
-        gap: 12,
-    },
-    stepRow: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        gap: 12,
-    },
-    stepText: {
         fontSize: 14,
+        lineHeight: 20,
+        marginBottom: 0,
     },
     actionArea: {
         width: '100%',
@@ -369,7 +367,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     processingText: {
-        marginBottom: 12,
+        marginBottom: 10,
         fontWeight: '500',
     },
     progressBarBg: {
@@ -384,48 +382,49 @@ const styles = StyleSheet.create({
     },
     completedContainer: {
         alignItems: 'center',
-        padding: 20,
+        padding: 16,
     },
     completedText: {
-        fontSize: 24,
+        fontSize: 22,
         fontWeight: '700',
-        marginTop: 16,
+        marginTop: 12,
     },
     // Game Specific Styles
     gameContainer: {
         width: '100%',
         alignItems: 'center',
-        padding: 10,
+        paddingVertical: 10,
     },
     gameQuestion: {
-        fontSize: 20,
+        fontSize: 18,
         fontWeight: '700',
-        marginBottom: 20,
+        marginBottom: 16,
         textAlign: 'center',
     },
     optionsGrid: {
         flexDirection: 'row',
         flexWrap: 'wrap',
         justifyContent: 'center',
-        gap: 12,
+        gap: 10,
         width: '100%',
     },
     optionButton: {
-        minWidth: '40%',
+        minWidth: '45%',
+        height: 44,
     },
     tapCount: {
-        fontSize: 72,
+        fontSize: 60,
         fontWeight: '900',
-        marginBottom: 20,
+        marginBottom: 16,
     },
     bigTapButton: {
-        width: 120,
-        height: 120,
-        borderRadius: 60,
+        width: 100,
+        height: 100,
+        borderRadius: 50,
     },
     scratchArea: {
         width: '100%',
-        height: 200,
+        height: 160,
         borderRadius: 16,
         borderWidth: 2,
         borderStyle: 'dashed',
@@ -436,18 +435,18 @@ const styles = StyleSheet.create({
     // Success State Styles
     successContainer: {
         alignItems: 'center',
-        padding: 24,
+        padding: 20,
         borderRadius: 20,
         backgroundColor: 'rgba(16, 185, 129, 0.05)',
         width: '100%',
     },
     successTitle: {
-        fontSize: 22,
+        fontSize: 20,
         fontWeight: '700',
-        marginTop: 12,
+        marginTop: 10,
     },
     successSub: {
-        fontSize: 16,
-        marginBottom: 8,
+        fontSize: 14,
+        marginBottom: 6,
     }
 });

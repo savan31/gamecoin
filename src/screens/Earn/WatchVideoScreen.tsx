@@ -14,6 +14,8 @@ const VIDEOS_REQUIRED = 2;
 const VIDEO_DURATION = 30; // seconds
 const REWARD_PER_VIDEO = 150;
 
+const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
+
 export const WatchVideoScreen: React.FC = () => {
     const navigation = useNavigation();
     const dispatch = useAppDispatch();
@@ -24,6 +26,9 @@ export const WatchVideoScreen: React.FC = () => {
     const [timeRemaining, setTimeRemaining] = useState(VIDEO_DURATION);
     const [totalEarned, setTotalEarned] = useState(0);
     const timerRef = useRef<NodeJS.Timeout | null>(null);
+
+    const isSmallDevice = SCREEN_WIDTH < 360;
+    const isShortDevice = SCREEN_HEIGHT < 700;
 
     useEffect(() => {
         return () => {
@@ -176,7 +181,7 @@ const styles = StyleSheet.create({
         gap: 16,
     },
     timerText: {
-        fontSize: 48,
+        fontSize: SCREEN_HEIGHT < 700 ? 36 : 48,
         fontWeight: '700',
     },
     progressBar: {
@@ -190,7 +195,7 @@ const styles = StyleSheet.create({
         borderRadius: 4,
     },
     watchingText: {
-        fontSize: 14,
+        fontSize: SCREEN_HEIGHT < 700 ? 12 : 14,
     },
     idleState: {
         alignItems: 'center',
@@ -213,7 +218,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     statValue: {
-        fontSize: 28,
+        fontSize: SCREEN_HEIGHT < 700 ? 22 : 28,
         fontWeight: '700',
     },
     statLabel: {

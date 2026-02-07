@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, Dimensions } from 'react-native';
 import Animated, { FadeInDown, FadeIn, ZoomIn } from 'react-native-reanimated';
 import { useNavigation } from '@react-navigation/native';
 import { useAppDispatch } from '../../store/hooks';
@@ -99,45 +99,47 @@ export const DailyLoginScreen: React.FC = () => {
     );
 };
 
+const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
+
 const styles = StyleSheet.create({
     container: {
         flex: 1,
     },
     content: {
         flex: 1,
-        padding: 24,
+        padding: 20,
         alignItems: 'center',
         justifyContent: 'center',
     },
     iconCircle: {
-        width: 160,
-        height: 160,
+        width: SCREEN_HEIGHT < 700 ? 100 : 140,
+        height: SCREEN_HEIGHT < 700 ? 100 : 140,
         borderRadius: 80,
         justifyContent: 'center',
         alignItems: 'center',
-        marginBottom: 32,
+        marginBottom: 24,
     },
     title: {
-        fontSize: 28,
+        fontSize: SCREEN_HEIGHT < 700 ? 22 : 26,
         fontWeight: '700',
-        marginBottom: 8,
+        marginBottom: 6,
     },
     subtitle: {
-        fontSize: 16,
-        marginBottom: 32,
+        fontSize: 14,
+        marginBottom: 24,
     },
     rewardCard: {
-        padding: 24,
+        padding: 20,
         alignItems: 'center',
-        marginBottom: 32,
+        marginBottom: 24,
         width: '100%',
     },
     rewardLabel: {
-        fontSize: 14,
-        marginBottom: 8,
+        fontSize: 13,
+        marginBottom: 6,
     },
     rewardValue: {
-        fontSize: 36,
+        fontSize: SCREEN_HEIGHT < 700 ? 28 : 32,
         fontWeight: '700',
     },
     actionButton: {
@@ -147,19 +149,19 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     successCircle: {
-        width: 160,
-        height: 160,
+        width: SCREEN_HEIGHT < 700 ? 100 : 140,
+        height: SCREEN_HEIGHT < 700 ? 100 : 140,
         borderRadius: 80,
         justifyContent: 'center',
         alignItems: 'center',
-        marginBottom: 24,
+        marginBottom: 20,
     },
     successTitle: {
-        fontSize: 28,
+        fontSize: SCREEN_HEIGHT < 700 ? 22 : 26,
         fontWeight: '700',
-        marginBottom: 8,
+        marginBottom: 6,
     },
     successSubtitle: {
-        fontSize: 16,
+        fontSize: 15,
     },
 });

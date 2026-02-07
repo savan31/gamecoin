@@ -80,14 +80,12 @@ const settingsSlice = createSlice({
                 state.isLoading = true;
             })
             .addCase(loadSettings.fulfilled, (state, action) => {
-                state.isLoading = false;
                 if (action.payload) {
-                    // Start with stored settings
                     const storedSettings = action.payload;
-                    // Enforce fixed rates regardless of what was stored
                     storedSettings.conversionRates = initialState.conversionRates;
-                    return { ...state, ...storedSettings, isLoading: false };
+                    Object.assign(state, storedSettings);
                 }
+                state.isLoading = false;
             })
             .addCase(loadSettings.rejected, (state) => {
                 state.isLoading = false;

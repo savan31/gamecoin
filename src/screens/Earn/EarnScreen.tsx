@@ -9,8 +9,8 @@ import { Icon } from '../../components/common/Icon';
 import { DisclaimerBanner } from '../../components/disclaimers/DisclaimerBanner';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
-const CARD_GAP = 16;
-const CARD_WIDTH = (SCREEN_WIDTH - 48 - CARD_GAP) / 2; // 16 padding on each side + gap
+const CARD_GAP = 12;
+const CARD_WIDTH = (SCREEN_WIDTH - (16 * 2) - CARD_GAP) / 2; // Precise calculation based on padding
 
 type TaskItem = {
     id: string;
@@ -196,21 +196,22 @@ const styles = StyleSheet.create({
         paddingBottom: 32,
     },
     sectionTitle: {
-        fontSize: 24,
+        fontSize: SCREEN_WIDTH < 360 ? 20 : 24,
         fontWeight: '700',
         marginBottom: 4,
     },
     headerSubtitle: {
-        fontSize: 14,
-        marginBottom: 24,
+        fontSize: SCREEN_WIDTH < 360 ? 12 : 14,
+        marginBottom: 20,
     },
     taskGrid: {
         flexDirection: 'row',
         flexWrap: 'wrap',
-        justifyContent: 'space-between',
+        justifyContent: 'flex-start',
+        gap: CARD_GAP,
     },
     taskCardWrapper: {
-        marginBottom: CARD_GAP,
+        // width handled inline
     },
     pressable: {
         borderRadius: 16,
@@ -220,36 +221,38 @@ const styles = StyleSheet.create({
         transform: [{ scale: 0.98 }],
     },
     taskCard: {
-        padding: 16,
+        padding: SCREEN_WIDTH < 360 ? 12 : 16,
         alignItems: 'center',
-        minHeight: 180,
+        minHeight: SCREEN_WIDTH < 360 ? 160 : 180,
     },
     iconCircle: {
-        width: 64,
-        height: 64,
+        width: SCREEN_WIDTH < 360 ? 48 : 64,
+        height: SCREEN_WIDTH < 360 ? 48 : 64,
         borderRadius: 32,
         justifyContent: 'center',
         alignItems: 'center',
-        marginBottom: 12,
+        marginBottom: 10,
     },
     taskTitle: {
-        fontSize: 14,
+        fontSize: SCREEN_WIDTH < 360 ? 12 : 14,
         fontWeight: '700',
         marginBottom: 4,
         textAlign: 'center',
     },
     taskDescription: {
-        fontSize: 11,
+        fontSize: 10,
         textAlign: 'center',
-        marginBottom: 12,
+        marginBottom: 10,
+        lineHeight: 14,
     },
     rewardBadge: {
-        paddingHorizontal: 12,
-        paddingVertical: 6,
-        borderRadius: 16,
+        paddingHorizontal: 10,
+        paddingVertical: 4,
+        borderRadius: 12,
+        marginTop: 'auto',
     },
     rewardText: {
-        fontSize: 13,
+        fontSize: SCREEN_WIDTH < 360 ? 11 : 13,
         fontWeight: '700',
     },
 });

@@ -68,10 +68,10 @@ const userSlice = createSlice({
                 state.isLoading = true;
             })
             .addCase(loadUserData.fulfilled, (state, action) => {
-                state.isLoading = false;
                 if (action.payload) {
-                    return { ...state, ...action.payload, isLoading: false };
+                    Object.assign(state, action.payload);
                 }
+                state.isLoading = false;
             })
             .addCase(loadUserData.rejected, (state) => {
                 state.isLoading = false;

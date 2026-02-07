@@ -19,7 +19,8 @@ import { SpinWheelSVG } from '../../components/funzone/SpinWheel/SpinWheelSVG';
 import { formatNumber } from '../../utils/formatters';
 
 const SCREEN_WIDTH = Dimensions.get('window').width;
-const WHEEL_SIZE = Math.min(SCREEN_WIDTH - 64, 300);
+const SCREEN_HEIGHT = Dimensions.get('window').height;
+const WHEEL_SIZE = Math.min(SCREEN_WIDTH - 64, SCREEN_HEIGHT < 700 ? 240 : 300);
 
 const SEGMENTS = [
     { value: 100, label: '100', color: '#EF4444' }, // Red
@@ -218,14 +219,14 @@ const styles = StyleSheet.create({
     content: {
         flex: 1,
         alignItems: 'center',
-        paddingVertical: 40,
+        paddingVertical: SCREEN_HEIGHT < 700 ? 20 : 40,
         paddingHorizontal: 20,
     },
     wheelContainer: {
         alignItems: 'center',
         justifyContent: 'center',
-        marginTop: 20,
-        marginBottom: 40,
+        marginTop: SCREEN_HEIGHT < 700 ? 10 : 20,
+        marginBottom: SCREEN_HEIGHT < 700 ? 20 : 40,
         position: 'relative',
     },
     wheel: {

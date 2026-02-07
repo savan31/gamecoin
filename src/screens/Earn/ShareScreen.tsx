@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, Share, Platform } from 'react-native';
+import { View, Text, StyleSheet, Share, Platform, ScrollView, Dimensions } from 'react-native';
 import Animated, { FadeInDown, ZoomIn } from 'react-native-reanimated';
 import { useNavigation } from '@react-navigation/native';
 import { useAppDispatch } from '../../store/hooks';
@@ -51,139 +51,147 @@ export const ShareScreen: React.FC = () => {
 
     return (
         <View style={[styles.container, { backgroundColor: theme.colors.background }]}>
-            <Animated.View entering={FadeInDown.duration(500)} style={styles.content}>
-                
-                {!shared ? (
-                    <>
-                        <View style={[styles.iconCircle, { backgroundColor: `${theme.colors.primary}20` }]}>
-                            <Icon name="share-2" size={80} color={theme.colors.primary} />
-                        </View>
+            <ScrollView contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
+                <Animated.View entering={FadeInDown.duration(500)} style={styles.content}>
+                    
+                    {!shared ? (
+                        <>
+                            <View style={[styles.iconCircle, { backgroundColor: `${theme.colors.primary}20` }]}>
+                                <Icon name="share-2" size={SCREEN_HEIGHT < 700 ? 50 : 80} color={theme.colors.primary} />
+                            </View>
 
-                        <Text style={[styles.title, { color: theme.colors.text }]}>
-                            Share & Earn
-                        </Text>
-                        <Text style={[styles.subtitle, { color: theme.colors.textSecondary }]}>
-                            Share the app with friends and earn rewards!
-                        </Text>
-
-                        <Card style={styles.rewardCard}>
-                            <Text style={[styles.rewardLabel, { color: theme.colors.textSecondary }]}>
-                                Share Reward
+                            <Text style={[styles.title, { color: theme.colors.text }]}>
+                                Share & Earn
                             </Text>
-                            <Text style={[styles.rewardValue, { color: theme.colors.success }]}>
-                                +{REWARD} RBX
+                            <Text style={[styles.subtitle, { color: theme.colors.textSecondary }]}>
+                                Share the app with friends and earn rewards!
                             </Text>
-                        </Card>
 
-                        <View style={styles.stepsContainer}>
-                            <View style={styles.stepRow}>
-                                <View style={[styles.stepNumber, { backgroundColor: theme.colors.primary }]}>
-                                    <Text style={styles.stepNumberText}>1</Text>
-                                </View>
-                                <Text style={[styles.stepText, { color: theme.colors.textSecondary }]}>
-                                    Click the share button below
+                            <Card style={styles.rewardCard}>
+                                <Text style={[styles.rewardLabel, { color: theme.colors.textSecondary }]}>
+                                    Share Reward
                                 </Text>
-                            </View>
-                            <View style={styles.stepRow}>
-                                <View style={[styles.stepNumber, { backgroundColor: theme.colors.primary }]}>
-                                    <Text style={styles.stepNumberText}>2</Text>
-                                </View>
-                                <Text style={[styles.stepText, { color: theme.colors.textSecondary }]}>
-                                    Share with at least one friend
+                                <Text style={[styles.rewardValue, { color: theme.colors.success }]}>
+                                    +{REWARD} RBX
                                 </Text>
-                            </View>
-                            <View style={styles.stepRow}>
-                                <View style={[styles.stepNumber, { backgroundColor: theme.colors.success }]}>
-                                    <Text style={styles.stepNumberText}>3</Text>
-                                </View>
-                                <Text style={[styles.stepText, { color: theme.colors.textSecondary }]}>
-                                    Get your reward instantly!
-                                </Text>
-                            </View>
-                        </View>
+                            </Card>
 
-                        <Button
-                            title={isLoading ? 'Sharing...' : 'Share Now'}
-                            onPress={handleShare}
-                            disabled={isLoading}
-                            loading={isLoading}
-                            size="large"
-                            variant="primary"
-                            icon="share"
-                            style={styles.actionButton}
-                        />
-                    </>
-                ) : (
-                    <Animated.View entering={ZoomIn.duration(400)} style={styles.successContainer}>
-                        <View style={[styles.successCircle, { backgroundColor: `${theme.colors.success}20` }]}>
-                            <Icon name="check-circle" size={80} color={theme.colors.success} />
-                        </View>
-                        <Text style={[styles.successTitle, { color: theme.colors.success }]}>
-                            Thanks for Sharing!
-                        </Text>
-                        <Text style={[styles.successSubtitle, { color: theme.colors.textSecondary }]}>
-                            You earned {REWARD} RBX
-                        </Text>
-                        <Button
-                            title="Go Back"
-                            onPress={() => navigation.goBack()}
-                            variant="ghost"
-                            style={{ marginTop: 24 }}
-                        />
-                    </Animated.View>
-                )}
+                            <View style={styles.stepsContainer}>
+                                <View style={styles.stepRow}>
+                                    <View style={[styles.stepNumber, { backgroundColor: theme.colors.primary }]}>
+                                        <Text style={styles.stepNumberText}>1</Text>
+                                    </View>
+                                    <Text style={[styles.stepText, { color: theme.colors.textSecondary }]}>
+                                        Click the share button below
+                                    </Text>
+                                </View>
+                                <View style={styles.stepRow}>
+                                    <View style={[styles.stepNumber, { backgroundColor: theme.colors.primary }]}>
+                                        <Text style={styles.stepNumberText}>2</Text>
+                                    </View>
+                                    <Text style={[styles.stepText, { color: theme.colors.textSecondary }]}>
+                                        Share with at least one friend
+                                    </Text>
+                                </View>
+                                <View style={styles.stepRow}>
+                                    <View style={[styles.stepNumber, { backgroundColor: theme.colors.success }]}>
+                                        <Text style={styles.stepNumberText}>3</Text>
+                                    </View>
+                                    <Text style={[styles.stepText, { color: theme.colors.textSecondary }]}>
+                                        Get your reward instantly!
+                                    </Text>
+                                </View>
+                            </View>
 
-            </Animated.View>
+                            <Button
+                                title={isLoading ? 'Sharing...' : 'Share Now'}
+                                onPress={handleShare}
+                                disabled={isLoading}
+                                loading={isLoading}
+                                size="large"
+                                variant="primary"
+                                icon="share"
+                                style={styles.actionButton}
+                            />
+                        </>
+                    ) : (
+                        <Animated.View entering={ZoomIn.duration(400)} style={styles.successContainer}>
+                            <View style={[styles.successCircle, { backgroundColor: `${theme.colors.success}20` }]}>
+                                <Icon name="check-circle" size={SCREEN_HEIGHT < 700 ? 50 : 80} color={theme.colors.success} />
+                            </View>
+                            <Text style={[styles.successTitle, { color: theme.colors.success }]}>
+                                Thanks for Sharing!
+                            </Text>
+                            <Text style={[styles.successSubtitle, { color: theme.colors.textSecondary }]}>
+                                You earned {REWARD} RBX
+                            </Text>
+                            <Button
+                                title="Go Back"
+                                onPress={() => navigation.goBack()}
+                                variant="ghost"
+                                style={{ marginTop: 24 }}
+                            />
+                        </Animated.View>
+                    )}
+
+                </Animated.View>
+            </ScrollView>
         </View>
     );
 };
+
+const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
 
 const styles = StyleSheet.create({
     container: {
         flex: 1,
     },
+    scrollContent: {
+        flexGrow: 1,
+    },
     content: {
         flex: 1,
-        padding: 24,
+        padding: 20,
         alignItems: 'center',
-        justifyContent: 'center',
+        paddingVertical: 32,
     },
     iconCircle: {
-        width: 160,
-        height: 160,
+        width: SCREEN_HEIGHT < 700 ? 100 : 140,
+        height: SCREEN_HEIGHT < 700 ? 100 : 140,
         borderRadius: 80,
         justifyContent: 'center',
         alignItems: 'center',
-        marginBottom: 32,
+        marginBottom: 24,
     },
     title: {
-        fontSize: 28,
+        fontSize: SCREEN_HEIGHT < 700 ? 22 : 26,
         fontWeight: '700',
-        marginBottom: 8,
+        marginBottom: 6,
     },
     subtitle: {
-        fontSize: 16,
-        marginBottom: 24,
+        fontSize: 14,
+        marginBottom: 20,
         textAlign: 'center',
+        paddingHorizontal: 20,
     },
     rewardCard: {
-        padding: 24,
+        padding: 20,
         alignItems: 'center',
-        marginBottom: 24,
+        marginBottom: 20,
         width: '100%',
     },
     rewardLabel: {
-        fontSize: 14,
-        marginBottom: 8,
+        fontSize: 13,
+        marginBottom: 6,
     },
     rewardValue: {
-        fontSize: 36,
+        fontSize: SCREEN_HEIGHT < 700 ? 28 : 32,
         fontWeight: '700',
     },
     stepsContainer: {
         width: '100%',
-        marginBottom: 32,
-        gap: 16,
+        marginBottom: 24,
+        gap: 12,
     },
     stepRow: {
         flexDirection: 'row',
@@ -191,19 +199,19 @@ const styles = StyleSheet.create({
         gap: 12,
     },
     stepNumber: {
-        width: 28,
-        height: 28,
-        borderRadius: 14,
+        width: 24,
+        height: 24,
+        borderRadius: 12,
         justifyContent: 'center',
         alignItems: 'center',
     },
     stepNumberText: {
         color: '#FFFFFF',
         fontWeight: '700',
-        fontSize: 14,
+        fontSize: 12,
     },
     stepText: {
-        fontSize: 14,
+        fontSize: 13,
         flex: 1,
     },
     actionButton: {
@@ -211,21 +219,23 @@ const styles = StyleSheet.create({
     },
     successContainer: {
         alignItems: 'center',
+        justifyContent: 'center',
+        flex: 1,
     },
     successCircle: {
-        width: 160,
-        height: 160,
+        width: SCREEN_HEIGHT < 700 ? 100 : 140,
+        height: SCREEN_HEIGHT < 700 ? 100 : 140,
         borderRadius: 80,
         justifyContent: 'center',
         alignItems: 'center',
-        marginBottom: 24,
+        marginBottom: 20,
     },
     successTitle: {
-        fontSize: 28,
+        fontSize: SCREEN_HEIGHT < 700 ? 22 : 26,
         fontWeight: '700',
-        marginBottom: 8,
+        marginBottom: 6,
     },
     successSubtitle: {
-        fontSize: 16,
+        fontSize: 15,
     },
 });
