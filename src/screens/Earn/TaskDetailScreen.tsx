@@ -20,7 +20,7 @@ export const TaskDetailScreen: React.FC = () => {
     const { theme } = useTheme();
     const { task } = route.params;
 
-    const [status, setStatus] = useState<'initial' | 'processing' | 'ready_to_claim' | 'completed'>('initial');
+    const [status, setStatus] = useState<'processing' | 'ready_to_claim' | 'completed'>('processing');
     const [progress, setProgress] = useState(0);
 
     // Game states
@@ -46,7 +46,6 @@ export const TaskDetailScreen: React.FC = () => {
             }
         }
         
-        setStatus('processing');
         setProgress(0);
         
         if (task.id === 'math_master') {
@@ -73,6 +72,11 @@ export const TaskDetailScreen: React.FC = () => {
             }, interval);
         }
     };
+
+    // Auto-start task on mount
+    useEffect(() => {
+        handleStartTask();
+    }, []);
 
     const handleMathAnswer = (choice: number) => {
         if (choice === mathData.a) {
@@ -241,44 +245,8 @@ export const TaskDetailScreen: React.FC = () => {
                     </View>
                 </Animated.View>
 
-                {/* Instructions */}
-                <Animated.View entering={FadeInDown.duration(500).delay(100)}>
-                    <Card style={styles.instructionCard}>
-                        <Text style={[styles.sectionTitle, { color: theme.colors.text }]}>Instructions</Text>
-                        <Text style={[styles.description, { color: theme.colors.textSecondary }]}>
-                            {task.description}
-                        </Text>
-                        <View style={styles.steps}>
-                            <View style={styles.stepRow}>
-                                <Icon name="play-circle" size={20} color={theme.colors.primary} />
-                                <Text style={[styles.stepText, { color: theme.colors.textSecondary }]}>Start the task</Text>
-                            </View>
-                             <View style={styles.stepRow}>
-                                <Icon name="clock" size={20} color={theme.colors.primary} />
-                                <Text style={[styles.stepText, { color: theme.colors.textSecondary }]}>
-                                    Complete the mini-game
-                                </Text>
-                            </View>
-                            <View style={styles.stepRow}>
-                                <Icon name="check-circle" size={20} color={theme.colors.success} />
-                                <Text style={[styles.stepText, { color: theme.colors.textSecondary }]}>Claim your reward</Text>
-                            </View>
-                        </View>
-                    </Card>
-                </Animated.View>
-
-                {/* Action Area */}
+                {/* Action Area - Immediate Gameplay */}
                 <Animated.View entering={FadeInDown.duration(500).delay(200)} style={styles.actionArea}>
-                    {status === 'initial' && (
-                        <Button
-                            title={task.url ? "Open Link & Start" : "Start Task"}
-                            onPress={handleStartTask}
-                            size="large"
-                            variant="primary"
-                            icon="play"
-                        />
-                    )}
-
                     {status === 'processing' && renderGameUI()}
 
                     {status === 'ready_to_claim' && (
@@ -315,6 +283,17 @@ export const TaskDetailScreen: React.FC = () => {
                     )}
                 </Animated.View>
 
+                {/* Instructions - Moved Below Game */}
+                {status !== 'completed' && (
+                    <Animated.View entering={FadeInDown.duration(500).delay(300)} style={{ width: '100%', marginTop: 24 }}>
+                        <Card style={styles.instructionCard}>
+                            <Text style={[styles.sectionTitle, { color: theme.colors.text }]}>Task Goal</Text>
+                            <Text style={[styles.description, { color: theme.colors.textSecondary }]}>
+                                {task.description}
+                            </Text>
+                        </Card>
+                    </Animated.View>
+                )}
             </ScrollView>
         </View>
     );
