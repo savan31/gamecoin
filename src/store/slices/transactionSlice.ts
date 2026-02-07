@@ -4,7 +4,7 @@ import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
 import { v4 as uuidv4 } from 'uuid';
 import { StorageService } from '../../services/storageService';
 
-export type TaskSource = 'spin' | 'scratch' | 'daily_login' | 'watch_video' | 'share' | 'manual';
+export type TaskSource = 'spin' | 'scratch_card' | 'math_master' | 'tap_challenge' | 'guess_number' | 'daily_login' | 'watch_video' | 'share' | 'manual';
 
 export interface Transaction {
     id: string;
@@ -124,7 +124,7 @@ export const selectTransactionsByDateRange = (
         return date >= startDate && date <= endDate;
     });
 
-const TASK_SOURCES: TaskSource[] = ['spin', 'scratch', 'daily_login', 'watch_video', 'share'];
+const TASK_SOURCES: TaskSource[] = ['spin', 'scratch_card', 'math_master', 'tap_challenge', 'guess_number', 'daily_login', 'watch_video', 'share'];
 
 export const selectDailyTaskEarnings = (state: {
     transactions: TransactionState;
