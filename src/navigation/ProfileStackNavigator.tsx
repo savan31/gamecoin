@@ -23,8 +23,10 @@ export const ProfileStackNavigator: React.FC = () => {
                 },
                 headerTintColor: theme.colors.text,
                 headerTitleStyle: {
-                    fontWeight: '600',
+                    fontWeight: '700',
+                    fontFamily: theme.typography.fontFamily.bold,
                 },
+                headerBackTitleVisible: false,
                 contentStyle: {
                     backgroundColor: theme.colors.background,
                 },

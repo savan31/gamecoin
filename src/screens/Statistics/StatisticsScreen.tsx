@@ -8,7 +8,7 @@ import { format, subDays, startOfDay, endOfDay, eachDayOfInterval } from 'date-f
 import { useAppSelector } from '../../store/hooks';
 import { selectAllTransactions } from '../../store/slices/transactionSlice';
 import { selectBalance } from '../../store/slices/coinSlice';
-import { selectSpinHistory } from '../../store/slices/funZoneSlice';
+
 import { useTheme } from '../../hooks/useTheme';
 import { Card } from '../../components/common/Card';
 import { DisclaimerBanner } from '../../components/disclaimers/DisclaimerBanner';
@@ -22,7 +22,7 @@ export const StatisticsScreen: React.FC = () => {
 
     const transactions = useAppSelector(selectAllTransactions);
     const currentBalance = useAppSelector(selectBalance);
-    const spinHistory = useAppSelector(selectSpinHistory);
+
 
     // Calculate weekly data
     const weeklyData = useMemo(() => {
@@ -102,20 +102,14 @@ export const StatisticsScreen: React.FC = () => {
         const weeklyAdded = weeklyData.reduce((sum, d) => sum + d.added, 0);
         const weeklySubtracted = weeklyData.reduce((sum, d) => sum + d.subtracted, 0);
 
-        const totalSpinValue = spinHistory.reduce((sum, s) => sum + s.value, 0);
-
-        const taskTransactions = transactions.filter((t) => t.source && ['spin', 'scratch', 'daily_login', 'watch_video', 'share'].includes(t.source));
         return {
             totalAdded,
             totalSubtracted,
             weeklyAdded,
             weeklySubtracted,
             totalTransactions: transactions.length,
-            totalSpins: spinHistory.length,
-            totalSpinValue,
-            totalTasksCompleted: taskTransactions.length,
         };
-    }, [transactions, weeklyData, spinHistory]);
+    }, [transactions, weeklyData]);
 
     const chartTheme = {
         ...VictoryTheme.material,
@@ -215,14 +209,7 @@ export const StatisticsScreen: React.FC = () => {
                                 Transactions
                             </Text>
                         </View>
-                        <View style={styles.statItem}>
-                            <Text style={[styles.statValue, { color: theme.colors.warning }]}>
-                                {summaryStats.totalSpins}
-                            </Text>
-                            <Text style={[styles.statLabel, { color: theme.colors.textSecondary }]}>
-                                Total Spins
-                            </Text>
-                        </View>
+
                     </View>
                 </Card>
             </Animated.View>
@@ -274,41 +261,7 @@ export const StatisticsScreen: React.FC = () => {
             </Animated.View>
 
             {/* Fun Zone Stats */}
-            <Animated.View entering={FadeInDown.duration(400).delay(400)}>
-                <Card style={styles.statsCard}>
-                    <Text style={[styles.cardTitle, { color: theme.colors.text }]}>
-                        Fun Zone Activity
-                    </Text>
-                    <View style={styles.funZoneStats}>
-                        <View style={styles.funZoneStatItem}>
-                            <View style={[styles.funZoneIcon, { backgroundColor: `${theme.colors.warning}20` }]}>
-                                <Text style={{ fontSize: 20 }}>🎰</Text>
-                            </View>
-                            <View>
-                                <Text style={[styles.funZoneStatValue, { color: theme.colors.text }]}>
-                                    {formatNumber(summaryStats.totalSpinValue)} RBX
-                                </Text>
-                                <Text style={[styles.funZoneStatLabel, { color: theme.colors.textSecondary }]}>
-                                    Total from Spins (Simulated)
-                                </Text>
-                            </View>
-                        </View>
-                        <View style={styles.funZoneStatItem}>
-                            <View style={[styles.funZoneIcon, { backgroundColor: `${theme.colors.success}20` }]}>
-                                <Text style={{ fontSize: 20 }}>✅</Text>
-                            </View>
-                            <View>
-                                <Text style={[styles.funZoneStatValue, { color: theme.colors.text }]}>
-                                    {summaryStats.totalTasksCompleted}
-                                </Text>
-                                <Text style={[styles.funZoneStatLabel, { color: theme.colors.textSecondary }]}>
-                                    Tasks Completed
-                                </Text>
-                            </View>
-                        </View>
-                    </View>
-                </Card>
-            </Animated.View>
+
 
             {/* Insights */}
             <Animated.View entering={FadeInDown.duration(400).delay(500)}>
@@ -323,12 +276,7 @@ export const StatisticsScreen: React.FC = () => {
                                 You've tracked {summaryStats.totalTransactions} RBX transactions
                             </Text>
                         </View>
-                        <View style={styles.insightItem}>
-                            <Text style={styles.insightIcon}>🎮</Text>
-                            <Text style={[styles.insightText, { color: theme.colors.textSecondary }]}>
-                                {summaryStats.totalSpins} wheel spins completed
-                            </Text>
-                        </View>
+
                         <View style={styles.insightItem}>
                             <Text style={styles.insightIcon}>💡</Text>
                             <Text style={[styles.insightText, { color: theme.colors.textSecondary }]}>

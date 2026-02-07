@@ -7,7 +7,7 @@ const STORAGE_KEYS = {
     COIN_DATA: '@gamecoin_tracker_coin_data',
     TRANSACTIONS: '@gamecoin_tracker_transactions',
     SETTINGS: '@gamecoin_tracker_settings',
-    FUN_ZONE: '@gamecoin_tracker_fun_zone',
+
     USER: '@gamecoin_tracker_user',
     FIRST_LAUNCH: '@gamecoin_tracker_first_launch',
 } as const;
@@ -30,20 +30,7 @@ interface SettingsData {
     };
 }
 
-interface FunZoneData {
-    spinHistory: Array<{ value: number; label: string; timestamp: string }>;
-    lastSpinDate: string | null;
-    dailySpinsRemaining: number;
-    scratchCard: { value: number; revealed: boolean; timestamp: string } | null;
-    lastScratchDate: string | null;
-    dailyScratchesRemaining: number;
-    dailyLoginClaimed: boolean;
-    lastLoginDate: string | null;
-    dailyVideosWatched: number;
-    lastVideoDate: string | null;
-    dailyShareClaimed: boolean;
-    lastShareDate: string | null;
-}
+
 
 interface UserData {
     username: string;
@@ -111,16 +98,7 @@ class StorageServiceClass {
         return this.getItem<SettingsData>(STORAGE_KEYS.SETTINGS);
     }
 
-    // Fun Zone
-    async saveFunZoneData(data: Partial<FunZoneData>): Promise<void> {
-        const existingData = await this.getFunZoneData();
-        const updatedData = { ...existingData, ...data };
-        await this.setItem(STORAGE_KEYS.FUN_ZONE, updatedData);
-    }
 
-    async getFunZoneData(): Promise<FunZoneData | null> {
-        return this.getItem<FunZoneData>(STORAGE_KEYS.FUN_ZONE);
-    }
 
     // User
     async saveUserData(data: UserData): Promise<void> {
@@ -149,11 +127,10 @@ class StorageServiceClass {
 
     // Export Data (for user data portability)
     async exportAllData(): Promise<object> {
-        const [coinData, transactions, settings, funZone, user] = await Promise.all([
+        const [coinData, transactions, settings, user] = await Promise.all([
             this.getCoinData(),
             this.getTransactions(),
             this.getSettings(),
-            this.getFunZoneData(),
             this.getUserData(),
         ]);
 
@@ -164,7 +141,6 @@ class StorageServiceClass {
                 coinData,
                 transactions,
                 settings,
-                funZone,
                 user,
             },
         };

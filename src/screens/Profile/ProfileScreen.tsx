@@ -8,7 +8,7 @@ import { useAppSelector, useAppDispatch } from '../../store/hooks';
 import { selectUsername, selectAvatarIndex, setUsername, setAvatarIndex, saveUserData } from '../../store/slices/userSlice';
 import { selectBalance } from '../../store/slices/coinSlice';
 import { selectAllTransactions } from '../../store/slices/transactionSlice';
-import { selectSpinHistory } from '../../store/slices/funZoneSlice';
+
 import { useTheme } from '../../hooks/useTheme';
 import { Card } from '../../components/common/Card';
 import { Button } from '../../components/common/Button';
@@ -74,9 +74,7 @@ export const ProfileScreen: React.FC = () => {
     const avatarIndex = useAppSelector(selectAvatarIndex);
     const balance = useAppSelector(selectBalance);
     const transactions = useAppSelector(selectAllTransactions);
-    const spinHistory = useAppSelector(selectSpinHistory);
 
-    const taskCount = transactions.filter((t) => t.source && ['spin', 'scratch', 'daily_login', 'watch_video', 'share'].includes(t.source)).length;
 
     const [showEditModal, setShowEditModal] = useState(false);
     const [editUsername, setEditUsername] = useState(username);
@@ -111,7 +109,7 @@ export const ProfileScreen: React.FC = () => {
                     <Card style={styles.profileCard}>
                         <Pressable style={styles.profileHeader} onPress={handleOpenEditModal}>
                             <View style={[styles.avatarContainer, { backgroundColor: theme.colors.primary }]}>
-                                <Text style={styles.avatarEmoji}>{currentAvatar.emoji}</Text>
+                                <Icon name={currentAvatar.icon} size={32} color="#FFFFFF" />
                             </View>
                             <View style={styles.profileInfo}>
                                 <Text style={[styles.username, { color: theme.colors.text }]}>
@@ -142,51 +140,11 @@ export const ProfileScreen: React.FC = () => {
                                     Transactions
                                 </Text>
                             </View>
-                            <View style={[styles.statDivider, { backgroundColor: theme.colors.border }]} />
-                            <View style={styles.statItem}>
-                                <Text style={[styles.statValue, { color: theme.colors.primary }]}>
-                                    {spinHistory.length}
-                                </Text>
-                                <Text style={[styles.statLabel, { color: theme.colors.textSecondary }]}>
-                                    Spins
-                                </Text>
-                            </View>
                         </View>
                     </Card>
                 </Animated.View>
 
-                {/* Quick Stats Card */}
-                <Animated.View entering={FadeInDown.duration(400).delay(200)}>
-                    <Card style={styles.quickStatsCard}>
-                        <Text style={[styles.sectionTitle, { color: theme.colors.text }]}>
-                            Activity Summary
-                        </Text>
-                        <View style={styles.quickStats}>
-                            <View style={styles.quickStatItem}>
-                                <Text style={styles.quickStatEmoji}>✅</Text>
-                                <View>
-                                    <Text style={[styles.quickStatValue, { color: theme.colors.text }]}>
-                                        {taskCount}
-                                    </Text>
-                                    <Text style={[styles.quickStatLabel, { color: theme.colors.textSecondary }]}>
-                                        Tasks Completed
-                                    </Text>
-                                </View>
-                            </View>
-                            <View style={styles.quickStatItem}>
-                                <Text style={styles.quickStatEmoji}>🎰</Text>
-                                <View>
-                                    <Text style={[styles.quickStatValue, { color: theme.colors.text }]}>
-                                        {spinHistory.length}
-                                    </Text>
-                                    <Text style={[styles.quickStatLabel, { color: theme.colors.textSecondary }]}>
-                                        Wheel Spins
-                                    </Text>
-                                </View>
-                            </View>
-                        </View>
-                    </Card>
-                </Animated.View>
+
 
                 {/* Menu Items */}
                 <Animated.View entering={FadeInDown.duration(400).delay(300)}>
@@ -254,25 +212,25 @@ export const ProfileScreen: React.FC = () => {
                         Choose Avatar
                     </Text>
                     <View style={styles.avatarGrid}>
-                        {AVATAR_OPTIONS.map((avatar) => (
-                            <Pressable
-                                key={avatar.id}
-                                style={[
-                                    styles.avatarOption,
-                                    {
-                                        backgroundColor: theme.colors.surface,
-                                        borderColor:
-                                            editAvatarIndex === avatar.id
-                                                ? theme.colors.primary
-                                                : theme.colors.border,
-                                        borderWidth: editAvatarIndex === avatar.id ? 2 : 1,
-                                    },
-                                ]}
-                                onPress={() => setEditAvatarIndex(avatar.id)}
-                            >
-                                <Text style={styles.avatarOptionEmoji}>{avatar.emoji}</Text>
-                            </Pressable>
-                        ))}
+                            {AVATAR_OPTIONS.map((avatar) => (
+                                <Pressable
+                                    key={avatar.id}
+                                    style={[
+                                        styles.avatarOption,
+                                        {
+                                            backgroundColor: theme.colors.surface,
+                                            borderColor:
+                                                editAvatarIndex === avatar.id
+                                                    ? theme.colors.primary
+                                                    : theme.colors.border,
+                                            borderWidth: editAvatarIndex === avatar.id ? 2 : 1,
+                                        },
+                                    ]}
+                                    onPress={() => setEditAvatarIndex(avatar.id)}
+                                >
+                                    <Icon name={avatar.icon} size={28} color={theme.colors.primary} />
+                                </Pressable>
+                            ))}
                     </View>
 
                     <Input
@@ -317,9 +275,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
     },
-    avatarEmoji: {
-        fontSize: 32,
-    },
+
     profileInfo: {
         flex: 1,
         marginLeft: 16,

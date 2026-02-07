@@ -13,19 +13,7 @@ import {
     loadTransactions,
 } from '../../store/slices/transactionSlice';
 import { selectUsername } from '../../store/slices/userSlice';
-import {
-    selectDailySpinsRemaining,
-    selectDailyScratchesRemaining,
-    selectDailyLoginClaimed,
-    selectDailyVideosWatched,
-    selectDailyShareClaimed,
-    loadFunZoneData,
-    resetDailySpins,
-    resetDailyScratches,
-    resetDailyLogin,
-    resetDailyVideos,
-    resetDailyShare,
-} from '../../store/slices/funZoneSlice';
+
 import { selectHasAcceptedDisclaimer } from '../../store/slices/settingsSlice';
 import { useTheme } from '../../hooks/useTheme';
 import { Card } from '../../components/common/Card';
@@ -33,7 +21,6 @@ import { Button } from '../../components/common/Button';
 import { BalanceCard } from '../../components/tracker/BalanceCard';
 import { DisclaimerBanner } from '../../components/disclaimers/DisclaimerBanner';
 import { QuickActionCard } from '../../components/home/QuickActionCard';
-import { DailyActivityCard } from '../../components/home/DailyActivityCard';
 import { DailyEarningsCard } from '../../components/home/DailyEarningsCard';
 import { formatNumber, getGreeting } from '../../utils/formatters';
 import { LEGAL_DISCLAIMERS } from '../../constants/legal';
@@ -55,11 +42,6 @@ export const HomeScreen: React.FC = () => {
     );
     const dailyTaskEarnings = useAppSelector(selectDailyTaskEarnings);
     const todayTaskTransactions = useAppSelector(selectTodayTaskTransactions);
-    const dailySpinsRemaining = useAppSelector(selectDailySpinsRemaining);
-    const dailyScratchesRemaining = useAppSelector(selectDailyScratchesRemaining);
-    const dailyLoginClaimed = useAppSelector(selectDailyLoginClaimed);
-    const dailyVideosWatched = useAppSelector(selectDailyVideosWatched);
-    const dailyShareClaimed = useAppSelector(selectDailyShareClaimed);
     const hasAcceptedDisclaimer = useAppSelector(selectHasAcceptedDisclaimer);
 
     // Initialize app data
@@ -68,15 +50,7 @@ export const HomeScreen: React.FC = () => {
             await Promise.all([
                 dispatch(loadCoinData()),
                 dispatch(loadTransactions()),
-                dispatch(loadFunZoneData()),
             ]);
-
-            // Reset daily limits if needed
-            dispatch(resetDailySpins());
-            dispatch(resetDailyScratches());
-            dispatch(resetDailyLogin());
-            dispatch(resetDailyVideos());
-            dispatch(resetDailyShare());
 
             setIsInitialized(true);
         };
@@ -96,13 +70,7 @@ export const HomeScreen: React.FC = () => {
         await Promise.all([
             dispatch(loadCoinData()),
             dispatch(loadTransactions()),
-            dispatch(loadFunZoneData()),
         ]);
-        dispatch(resetDailySpins());
-        dispatch(resetDailyScratches());
-        dispatch(resetDailyLogin());
-        dispatch(resetDailyVideos());
-        dispatch(resetDailyShare());
         setRefreshing(false);
     }, [dispatch]);
 
@@ -202,16 +170,6 @@ export const HomeScreen: React.FC = () => {
                             })}
                         />
                         <QuickActionCard
-                            title="Spin Wheel"
-                            icon="disc"
-                            color={theme.colors.warning}
-                            badge={dailySpinsRemaining > 0 ? `${dailySpinsRemaining}` : undefined}
-                            onPress={() => navigation.navigate('MainTabs', {
-                                screen: 'FunZoneTab',
-                                params: { screen: 'SpinWheel' },
-                            })}
-                        />
-                        <QuickActionCard
                             title="Statistics"
                             icon="bar-chart-2"
                             color={theme.colors.info}
@@ -224,41 +182,7 @@ export const HomeScreen: React.FC = () => {
                 </Animated.View>
 
                 {/* Daily Activity */}
-                <Animated.View
-                    entering={FadeInDown.duration(400).delay(400)}
-                    style={styles.section}
-                >
-                    <Text style={[styles.sectionTitle, { color: theme.colors.text }]}>
-                        Daily Activities
-                    </Text>
-                    <DailyActivityCard
-                        spinsRemaining={dailySpinsRemaining}
-                        scratchesRemaining={dailyScratchesRemaining}
-                        dailyLoginClaimed={dailyLoginClaimed}
-                        dailyVideosWatched={dailyVideosWatched}
-                        dailyShareClaimed={dailyShareClaimed}
-                        onSpinPress={() => navigation.navigate('MainTabs', {
-                            screen: 'FunZoneTab',
-                            params: { screen: 'SpinWheel' },
-                        })}
-                        onScratchPress={() => navigation.navigate('MainTabs', {
-                            screen: 'FunZoneTab',
-                            params: { screen: 'ScratchCard' },
-                        })}
-                        onDailyLoginPress={() => navigation.navigate('MainTabs', {
-                            screen: 'FunZoneTab',
-                            params: { screen: 'DailyLogin' },
-                        })}
-                        onWatchVideoPress={() => navigation.navigate('MainTabs', {
-                            screen: 'FunZoneTab',
-                            params: { screen: 'WatchVideo' },
-                        })}
-                        onSharePress={() => navigation.navigate('MainTabs', {
-                            screen: 'FunZoneTab',
-                            params: { screen: 'Share' },
-                        })}
-                    />
-                </Animated.View>
+
 
                 {/* Recent Activity */}
                 <Animated.View
@@ -278,7 +202,7 @@ export const HomeScreen: React.FC = () => {
                             size="small"
                         />
                     </View>
-                    <Card style={styles.activityCard}>
+                    <Card variant="glass" style={styles.activityCard}>
                         {recentTransactions.length > 0 ? (
                             recentTransactions.map((transaction, index) => (
                                 <Animated.View
@@ -385,114 +309,126 @@ const styles = StyleSheet.create({
         flex: 1,
     },
     scrollContent: {
-        padding: 16,
+        padding: 20,
         paddingTop: 60,
-        paddingBottom: 32,
+        paddingBottom: 40,
     },
     header: {
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'flex-start',
-        marginBottom: 16,
+        marginBottom: 20,
     },
     greeting: {
-        fontSize: 14,
-        marginBottom: 4,
+        fontSize: 15,
+        marginBottom: 6,
+        fontWeight: '500',
+        letterSpacing: 0.3,
     },
     username: {
-        fontSize: 24,
-        fontWeight: '700',
+        fontSize: 28,
+        fontWeight: '800',
+        letterSpacing: -0.5,
     },
     simulatorBadge: {
-        backgroundColor: 'rgba(99, 102, 241, 0.2)',
-        paddingHorizontal: 10,
-        paddingVertical: 6,
-        borderRadius: 6,
+        backgroundColor: 'rgba(99, 102, 241, 0.25)',
+        borderColor: 'rgba(99, 102, 241, 0.4)',
+        borderWidth: 1,
+        paddingHorizontal: 12,
+        paddingVertical: 7,
+        borderRadius: 8,
     },
     simulatorBadgeText: {
-        color: '#6366F1',
+        color: '#818CF8',
         fontSize: 10,
-        fontWeight: '700',
-        letterSpacing: 1,
+        fontWeight: '800',
+        letterSpacing: 1.2,
     },
     section: {
-        marginTop: 24,
+        marginTop: 28,
     },
     sectionHeader: {
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
-        marginBottom: 12,
+        marginBottom: 14,
     },
     sectionTitle: {
-        fontSize: 18,
-        fontWeight: '600',
-        marginBottom: 12,
+        fontSize: 20,
+        fontWeight: '700',
+        marginBottom: 14,
+        letterSpacing: -0.3,
     },
     quickActionsGrid: {
         flexDirection: 'row',
         flexWrap: 'wrap',
-        gap: 12,
+        gap: 14,
     },
     activityCard: {
-        padding: 16,
+        padding: 18,
     },
     activityItem: {
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
-        paddingVertical: 12,
+        paddingVertical: 14,
     },
     activityItemBorder: {
         borderBottomWidth: 1,
-        borderBottomColor: 'rgba(255, 255, 255, 0.1)',
+        borderBottomColor: 'rgba(148, 163, 184, 0.15)',
     },
     activityLeft: {
         flexDirection: 'row',
         alignItems: 'center',
-        gap: 12,
+        gap: 14,
     },
     activityIcon: {
-        width: 36,
-        height: 36,
-        borderRadius: 18,
+        width: 40,
+        height: 40,
+        borderRadius: 20,
         justifyContent: 'center',
         alignItems: 'center',
     },
     activityDesc: {
-        fontSize: 14,
-        fontWeight: '500',
+        fontSize: 15,
+        fontWeight: '600',
+        letterSpacing: -0.2,
     },
     activityTime: {
-        fontSize: 12,
-        marginTop: 2,
+        fontSize: 13,
+        marginTop: 3,
+        fontWeight: '500',
     },
     activityAmount: {
-        fontSize: 16,
-        fontWeight: '600',
+        fontSize: 17,
+        fontWeight: '700',
+        letterSpacing: -0.3,
     },
     emptyActivity: {
-        paddingVertical: 24,
+        paddingVertical: 32,
         alignItems: 'center',
     },
     emptyActivityText: {
-        fontSize: 14,
-        marginBottom: 4,
+        fontSize: 15,
+        marginBottom: 6,
+        fontWeight: '600',
     },
     emptyActivityHint: {
-        fontSize: 12,
+        fontSize: 13,
+        fontWeight: '500',
     },
     footerDisclaimer: {
-        marginTop: 32,
-        padding: 16,
-        backgroundColor: 'rgba(255, 193, 7, 0.1)',
-        borderRadius: 12,
+        marginTop: 36,
+        padding: 18,
+        backgroundColor: 'rgba(245, 158, 11, 0.12)',
+        borderRadius: 14,
         borderLeftWidth: 4,
-        borderLeftColor: '#FFC107',
+        borderLeftColor: '#F59E0B',
     },
     footerText: {
-        fontSize: 11,
-        lineHeight: 18,
+        fontSize: 12,
+        lineHeight: 19,
         fontStyle: 'italic',
+        fontWeight: '500',
     },
 });

@@ -16,19 +16,11 @@ export type MainTabParamList = {
     HomeTab: undefined;
     TrackerTab: undefined;
     CalculatorTab: undefined;
-    FunZoneTab: NavigatorScreenParams<FunZoneStackParamList>;
+
     ProfileTab: NavigatorScreenParams<ProfileStackParamList>;
 };
 
-// Fun Zone Stack
-export type FunZoneStackParamList = {
-    FunZoneMain: undefined;
-    SpinWheel: undefined;
-    ScratchCard: undefined;
-    DailyLogin: undefined;
-    WatchVideo: undefined;
-    Share: undefined;
-};
+
 
 // Profile Stack
 export type ProfileStackParamList = {
@@ -50,15 +42,7 @@ export type TrackerScreenProps = CompositeScreenProps<
     NativeStackScreenProps<RootStackParamList>
 >;
 
-export type FunZoneScreenProps = CompositeScreenProps<
-    NativeStackScreenProps<FunZoneStackParamList, 'FunZoneMain'>,
-    BottomTabScreenProps<MainTabParamList>
->;
 
-export type SpinWheelScreenProps = NativeStackScreenProps<
-    FunZoneStackParamList,
-    'SpinWheel'
->;
 
 export type ProfileScreenProps = CompositeScreenProps<
     NativeStackScreenProps<ProfileStackParamList, 'ProfileMain'>,

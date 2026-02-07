@@ -6,7 +6,13 @@ import { Provider } from 'react-redux';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import * as SplashScreen from 'expo-splash-screen';
-import * as Font from 'expo-font';
+import {
+    useFonts,
+    Roboto_400Regular,
+    Roboto_500Medium,
+    Roboto_700Bold,
+    Roboto_900Black,
+} from '@expo-google-fonts/roboto';
 import { store } from './store/store';
 import { ThemeProvider, useTheme } from './hooks/useTheme';
 import { RootNavigator } from './navigation/RootNavigator';
@@ -41,16 +47,18 @@ const AppContent: React.FC = () => {
 };
 
 const App: React.FC = () => {
+    const [fontsLoaded] = useFonts({
+        Roboto_400Regular,
+        Roboto_500Medium,
+        Roboto_700Bold,
+        Roboto_900Black,
+    });
+
     const [appIsReady, setAppIsReady] = useState(false);
 
     useEffect(() => {
         async function prepare() {
             try {
-                // Pre-load any custom fonts here if needed
-                // await Font.loadAsync({
-                //   'CustomFont-Regular': require('./assets/fonts/CustomFont-Regular.ttf'),
-                // });
-
                 // Artificial delay to show splash screen (optional)
                 await new Promise(resolve => setTimeout(resolve, 500));
             } catch (e) {
@@ -63,7 +71,7 @@ const App: React.FC = () => {
         prepare();
     }, []);
 
-    if (!appIsReady) {
+    if (!appIsReady || !fontsLoaded) {
         return null;
     }
 

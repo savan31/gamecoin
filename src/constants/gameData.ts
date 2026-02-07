@@ -19,12 +19,12 @@ export const SCRATCH_CARD_RANGES = {
 };
 
 export const AVATAR_OPTIONS = [
-    { id: 0, emoji: '🎮' },
-    { id: 1, emoji: '🎯' },
-    { id: 2, emoji: '🎲' },
-    { id: 3, emoji: '🏆' },
-    { id: 4, emoji: '⭐' },
-    { id: 5, emoji: '🚀' },
-    { id: 6, emoji: '💎' },
-    { id: 7, emoji: '🎪' },
+    { id: 0, icon: 'gamepad' },
+    { id: 1, icon: 'target' },
+    { id: 2, icon: 'box' },
+    { id: 3, icon: 'award' },
+    { id: 4, icon: 'star' },
+    { id: 5, icon: 'rocket' },
+    { id: 6, icon: 'zap' },
+    { id: 7, icon: 'smile' },
 ];

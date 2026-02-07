@@ -5,7 +5,6 @@ import { useAppDispatch } from '../store/hooks';
 import { loadCoinData, saveCoinData } from '../store/slices/coinSlice';
 import { loadTransactions, saveTransactions } from '../store/slices/transactionSlice';
 import { loadSettings, saveSettings } from '../store/slices/settingsSlice';
-import { loadFunZoneData, saveFunZoneData } from '../store/slices/funZoneSlice';
 import { loadUserData, saveUserData } from '../store/slices/userSlice';
 import { StorageService } from '../services/storageService';
 
@@ -30,7 +29,6 @@ export const useStorage = (): UseStorageReturn => {
                 dispatch(loadCoinData()),
                 dispatch(loadTransactions()),
                 dispatch(loadSettings()),
-                dispatch(loadFunZoneData()),
                 dispatch(loadUserData()),
             ]);
             setIsInitialized(true);
@@ -49,7 +47,6 @@ export const useStorage = (): UseStorageReturn => {
                 dispatch(saveCoinData()),
                 dispatch(saveTransactions()),
                 dispatch(saveSettings()),
-                dispatch(saveFunZoneData()),
                 dispatch(saveUserData()),
             ]);
         } catch (error) {

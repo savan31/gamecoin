@@ -21,7 +21,7 @@ import { useTheme } from '../hooks/useTheme';
 import { HomeScreen } from '../screens/Home';
 import { TrackerScreen } from '../screens/Tracker';
 import { CalculatorScreen } from '../screens/Calculator';
-import { FunZoneStackNavigator } from './FunZoneStackNavigator';
+
 import { ProfileStackNavigator } from './ProfileStackNavigator';
 import { TabIcon } from '../components/common/TabIcon';
 import type { MainTabParamList } from './navigationTypes';
@@ -208,21 +208,7 @@ export const BottomTabNavigator: React.FC = () => {
                     ),
                 }}
             />
-            <Tab.Screen
-                name="FunZoneTab"
-                component={FunZoneStackNavigator}
-                options={{
-                    tabBarLabel: 'Fun Zone',
-                    tabBarIcon: ({ focused, color }) => (
-                        <AnimatedTabIcon
-                            focused={focused}
-                            iconName="gamepad"
-                            label="Fun Zone"
-                            color={color}
-                        />
-                    ),
-                }}
-            />
+
             <Tab.Screen
                 name="ProfileTab"
                 component={ProfileStackNavigator}
