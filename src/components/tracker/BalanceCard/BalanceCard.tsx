@@ -1,7 +1,7 @@
 // src/components/tracker/BalanceCard/BalanceCard.tsx
 
 import React, { useEffect } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, Image } from 'react-native';
 import Animated, {
     useSharedValue,
     useAnimatedStyle,
@@ -18,13 +18,19 @@ interface BalanceCardProps {
     balance: number;
     dailyChange: number;
     changePercentage: number;
+    /**
+     * When true, show the VC logo instead of the "VC" currency text.
+     * Used on the Home screen only.
+     */
+    showLogo?: boolean;
 }
 
 export const BalanceCard: React.FC<BalanceCardProps> = ({
-                                                            balance,
-                                                            dailyChange,
-                                                            changePercentage,
-                                                        }) => {
+    balance,
+    dailyChange,
+    changePercentage,
+    showLogo = false,
+}) => {
     const { theme } = useTheme();
     const animatedBalance = useSharedValue(0);
     const changeScale = useSharedValue(0);
@@ -55,9 +61,22 @@ export const BalanceCard: React.FC<BalanceCardProps> = ({
             </View>
 
             <View style={styles.balanceContainer}>
-                <Text style={[styles.currencySymbol, { color: theme.colors.primary }]}>
-                    VC
-                </Text>
+                {showLogo ? (
+                    <Image
+                        source={require('../../../assets/images/vc-logo.png.png')}
+                        style={styles.currencyLogo}
+                        resizeMode="contain"
+                    />
+                ) : (
+                    <Text
+                        style={[
+                            styles.currencySymbol,
+                            { color: theme.colors.primary },
+                        ]}
+                    >
+                        VC
+                    </Text>
+                )}
                 <Text style={[styles.balanceValue, { color: theme.colors.text }]}>
                     {formatNumber(balance)}
                 </Text>
@@ -117,6 +136,11 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'baseline',
         marginBottom: 16,
+    },
+    currencyLogo: {
+        width: 34,
+        height: 34,
+        marginRight: 8,
     },
     currencySymbol: {
         fontSize: 24,

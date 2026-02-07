@@ -140,6 +140,7 @@ export const HomeScreen: React.FC = () => {
                         balance={balance}
                         dailyChange={dailyChange}
                         changePercentage={changePercentage}
+                        showLogo
                     />
                 </Animated.View>
 

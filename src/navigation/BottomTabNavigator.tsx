@@ -1,12 +1,21 @@
 // src/navigation/BottomTabNavigator.tsx
 
 import React from 'react';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { View, StyleSheet } from 'react-native';
+import {
+    createBottomTabNavigator,
+    type BottomTabBarProps,
+} from '@react-navigation/bottom-tabs';
+import {
+    View,
+    StyleSheet,
+    ScrollView,
+    TouchableOpacity,
+    Text,
+    Dimensions,
+} from 'react-native';
 import Animated, {
     useAnimatedStyle,
     withSpring,
-    interpolate,
 } from 'react-native-reanimated';
 import { useTheme } from '../hooks/useTheme';
 import { HomeScreen } from '../screens/Home';
@@ -52,6 +61,98 @@ const AnimatedTabIcon: React.FC<{
     );
 };
 
+const CustomTabBar: React.FC<BottomTabBarProps> = ({
+    state,
+    descriptors,
+    navigation,
+}) => {
+    const { theme } = useTheme();
+
+    return (
+        <View
+            style={[
+                styles.tabBarContainer,
+                {
+                    backgroundColor: theme.colors.surface,
+                    borderTopColor: theme.colors.border,
+                },
+            ]}
+        >
+            <ScrollView
+                horizontal
+                showsHorizontalScrollIndicator={false}
+                contentContainerStyle={styles.tabBarScrollContent}
+            >
+                {state.routes.map((route, index) => {
+                    const { options } = descriptors[route.key];
+                    const labelFromOptions =
+                        options.tabBarLabel ??
+                        options.title ??
+                        route.name;
+                    const label =
+                        typeof labelFromOptions === 'string'
+                            ? labelFromOptions
+                            : route.name;
+
+                    const isFocused = state.index === index;
+
+                    const onPress = () => {
+                        const event = navigation.emit({
+                            type: 'tabPress',
+                            target: route.key,
+                            canPreventDefault: true,
+                        });
+
+                        if (!isFocused && !event.defaultPrevented) {
+                            navigation.navigate(route.name as never);
+                        }
+                    };
+
+                    const color = isFocused
+                        ? theme.colors.primary
+                        : theme.colors.textSecondary;
+
+                    return (
+                        <TouchableOpacity
+                            key={route.key}
+                            accessibilityRole="button"
+                            accessibilityState={
+                                isFocused ? { selected: true } : {}
+                            }
+                            onPress={onPress}
+                            style={styles.tabItem}
+                            activeOpacity={0.8}
+                        >
+                            {options.tabBarIcon
+                                ? options.tabBarIcon({
+                                      focused: isFocused,
+                                      color,
+                                      size: 24,
+                                  })
+                                : (
+                                      <TabIcon
+                                          name="circle"
+                                          size={24}
+                                          color={color}
+                                      />
+                                  )}
+                            <Text
+                                style={[
+                                    styles.tabLabel,
+                                    { color },
+                                ]}
+                                numberOfLines={1}
+                            >
+                                {label}
+                            </Text>
+                        </TouchableOpacity>
+                    );
+                })}
+            </ScrollView>
+        </View>
+    );
+};
+
 export const BottomTabNavigator: React.FC = () => {
     const { theme } = useTheme();
 
@@ -59,22 +160,8 @@ export const BottomTabNavigator: React.FC = () => {
         <Tab.Navigator
             screenOptions={{
                 headerShown: false,
-                tabBarActiveTintColor: theme.colors.primary,
-                tabBarInactiveTintColor: theme.colors.textSecondary,
-                tabBarStyle: {
-                    backgroundColor: theme.colors.surface,
-                    borderTopColor: theme.colors.border,
-                    borderTopWidth: 1,
-                    paddingTop: 8,
-                    paddingBottom: 8,
-                    height: 64,
-                },
-                tabBarLabelStyle: {
-                    fontSize: 12,
-                    fontWeight: '500',
-                    marginTop: 4,
-                },
             }}
+            tabBar={(props) => <CustomTabBar {...props} />}
         >
             <Tab.Screen
                 name="HomeTab"
@@ -156,6 +243,23 @@ export const BottomTabNavigator: React.FC = () => {
 };
 
 const styles = StyleSheet.create({
+    tabBarContainer: {
+        borderTopWidth: 1,
+    },
+    tabBarScrollContent: {
+        paddingHorizontal: 12,
+    },
+    tabItem: {
+        minWidth: Dimensions.get('window').width / 3,
+        paddingVertical: 8,
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    tabLabel: {
+        fontSize: 12,
+        fontWeight: '500',
+        marginTop: 4,
+    },
     tabIconContainer: {
         alignItems: 'center',
         justifyContent: 'center',
